@@ -1,4 +1,4 @@
-package adventofcode.y2022
+package adventofcode.y2022 // ktlint-disable filename
 
 import adventofcode.readFile
 
