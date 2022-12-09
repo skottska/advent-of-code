@@ -8,22 +8,15 @@ fun main(args: Array<String>) {
     val lines = readFile("src/main/resources/y2015/day6.txt")
     val square = 1000
     var result = 0
-    repeat(square) { index ->
-        val row = lightCommandsByRow(lines, index, isPart1 = true)
-        result += row.filter { it == 1 }.size
-    }
+    repeat(square) { i -> result += lightCommandsByRow(lines, i, true).filter { it == 1 }.size }
     println("part1=$result")
     result = 0
-    repeat(square) { index ->
-        val row = lightCommandsByRow(lines, index, isPart1 = false)
-        result += row.sumOf { it }
-    }
+    repeat(square) { i -> result += lightCommandsByRow(lines, i, false).sumOf { it } }
     println("part2=$result")
 }
 
 fun lightCommandsByRow(lines: List<String>, index: Int, isPart1: Boolean): List<Int> {
-    val row = mutableListOf<Int>()
-    repeat(1000) { row.add(0) }
+    val row = MutableList(1000) { 0 }
     lines.forEach { it ->
         val line = if (it.contains("toggle")) ("aa $it") else it
         val split = split(line)

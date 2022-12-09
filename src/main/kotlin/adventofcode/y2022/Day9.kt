@@ -12,8 +12,7 @@ fun main(args: Array<String>) {
 fun move(numTails: Int): Int {
     val lines = readFile("src/main/resources/y2022/day9.txt")
     var posH = Pair(0, 0)
-    val tailPoss = mutableListOf<Pair<Int, Int>>()
-    repeat(numTails) { tailPoss.add(Pair(0, 0)) }
+    val tailPoss = MutableList(numTails) { Pair(0, 0) }
     val posVisited = mutableSetOf(Pair(0, 0))
     lines.forEach { line ->
         val split = split(line)
