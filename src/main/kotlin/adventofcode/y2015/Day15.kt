@@ -3,31 +3,38 @@ package adventofcode.y2015 // ktlint-disable filename
 import adventofcode.matches
 import adventofcode.readFile
 
-var maxCookieProp = 0
-
 fun main(args: Array<String>) {
     val lines = readFile("src/main/resources/y2015/day15.txt")
     val cookieProps = lines.map { line -> CookieProp(matches(line, "[-0-9]+").map { it.toInt() }) }
-    // mix(MixingBowl(), cookieProps)
-    joe(100, cookieProps)
-    println(maxCookieProp)
+    println("part1=" + maxCookieScore(100, cookieProps))
+    println("part2=" + maxCookieScore(100, cookieProps, 500))
 }
 
 fun totalScore(counts: List<Int>, props: List<CookieProp>): Int {
-    val mixingBowl = MixingBowl2()
+    val mixingBowl = MixingBowl()
     for (i in counts.indices) {
         mixingBowl.map[props[i]] = counts[i]
     }
     return mixingBowl.totalScore()
 }
 
-fun joe(max: Int, props: List<CookieProp>) {
+fun totalCalories(counts: List<Int>, props: List<CookieProp>): Int {
+    val mixingBowl = MixingBowl()
+    for (i in counts.indices) {
+        mixingBowl.map[props[i]] = counts[i]
+    }
+    return mixingBowl.totalCalories()
+}
+
+fun maxCookieScore(max: Int, props: List<CookieProp>, calorieLimit: Int? = null): Int {
+    var maxCookieProp = 0
     val start = mutableListOf(0, 0, 0, max)
     while (start != listOf(max, 0, 0, 0)) {
-        maxCookieProp = maxOf(maxCookieProp, totalScore(start, props))
+        if (calorieLimit == null || calorieLimit == totalCalories(start, props)) maxCookieProp = maxOf(maxCookieProp, totalScore(start, props))
         inc(start, max)
         while (start.sumOf { it } != max) inc(start, max)
     }
+    return maxCookieProp
 }
 
 fun inc(l: MutableList<Int>, max: Int) {
@@ -46,31 +53,11 @@ fun inc(l: MutableList<Int>, max: Int) {
     }
 }
 
-fun mix(soFar: MixingBowl, ingredients: List<CookieProp>) {
-    if (soFar.size() == 100) maxCookieProp = maxOf(maxCookieProp, soFar.totalScore())
-    else ingredients.forEach {
-        val combo = soFar + it
-        if (combo.totalScore() > 0) mix(combo, ingredients)
-    }
-}
-
 data class MixingBowl(
-    val map: Map<CookieProp, Int> = mapOf()
-) {
-    fun size() = map.values.sumOf { it }
-
-    operator fun plus(add: CookieProp) = MixingBowl(map.toMap() + mapOf(add to (map[add] ?: 0) + 1))
-
-    fun totalScore() = total { it.cap } * total { it.dur } * total { it.fla } * total { it.tex }
-    private fun total(func: (CookieProp) -> Int) = maxOf(0, map.keys.sumOf { func(it) * (map[it] ?: 0) })
-}
-
-data class MixingBowl2(
     val map: MutableMap<CookieProp, Int> = mutableMapOf()
 ) {
-    fun size() = map.values.sumOf { it }
-
     fun totalScore() = total { it.cap } * total { it.dur } * total { it.fla } * total { it.tex }
+    fun totalCalories() = total { it.calories }
     private fun total(func: (CookieProp) -> Int) = maxOf(0, map.keys.sumOf { func(it) * (map[it] ?: 0) })
 }
 
