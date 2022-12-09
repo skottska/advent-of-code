@@ -3,7 +3,7 @@ package adventofcode.y2015 // ktlint-disable filename
 import adventofcode.readFile
 import adventofcode.split
 
-val map = mutableMapOf<Pair<String, String>, Int>()
+val tripMap = mutableMapOf<Pair<String, String>, Int>()
 var trips = mutableSetOf<Int>()
 
 fun main(args: Array<String>) {
@@ -11,7 +11,7 @@ fun main(args: Array<String>) {
     val destinations = mutableSetOf<String>()
     lines.forEach { line ->
         split(line).let {
-            map[Pair(it[0], it[2])] = it[4].toInt()
+            tripMap[Pair(it[0], it[2])] = it[4].toInt()
             destinations.add(it[0])
             destinations.add(it[2])
         }
@@ -26,7 +26,7 @@ fun trip(soFar: List<String>, left: List<String>) {
     else left.forEach { trip(soFar + it, left - it) }
 }
 
-fun distance(from: String, to: String) = map[Pair(from, to)] ?: map[Pair(to, from)] ?: 0
+fun distance(from: String, to: String) = tripMap[Pair(from, to)] ?: tripMap[Pair(to, from)] ?: 0
 
 fun totalDistance(list: List<String>): Int {
     var total = 0
