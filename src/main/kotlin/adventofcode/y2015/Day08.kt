@@ -3,7 +3,7 @@ package adventofcode.y2015 // ktlint-disable filename
 import adventofcode.readFile
 
 fun main(args: Array<String>) {
-    val lines = readFile("src/main/resources/y2015/day8.txt")
+    val lines = readFile("src/main/resources/y2015/day08.txt")
     println("part1=" + lines.fold(0) { total, line -> total + line.length - decode(line).length })
     println("part2=" + lines.fold(0) { total, line -> total + encode(line).length - line.length })
 }

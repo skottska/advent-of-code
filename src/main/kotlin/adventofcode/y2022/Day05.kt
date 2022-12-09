@@ -8,7 +8,7 @@ fun main(args: Array<String>) {
 }
 
 fun stacks(multiplePickup: Boolean): String {
-    val lines = readFile("src/main/resources/y2022/day5.txt")
+    val lines = readFile("src/main/resources/y2022/day05.txt")
     var index = 0
     val stacks = mutableMapOf<Int, String>()
     while (index < lines.size) {
@@ -24,7 +24,7 @@ fun stacks(multiplePickup: Boolean): String {
     while (index < lines.size) {
         val line = lines[index++]
         val (num, from, to) = Regex("[0-9]+").findAll(line).map { it.groupValues[0] }.toList().let { Triple(it[0].toInt(), it[1].toInt(), it[2].toInt()) }
-        val toMove = (stacks[from]?.substring(0, num) ?: "").let { if (multiplePickup) it else it.reversed()}
+        val toMove = (stacks[from]?.substring(0, num) ?: "").let { if (multiplePickup) it else it.reversed() }
         stacks[from] = stacks[from]?.substring(num) ?: ""
         stacks[to] = toMove + (stacks[to] ?: "")
     }

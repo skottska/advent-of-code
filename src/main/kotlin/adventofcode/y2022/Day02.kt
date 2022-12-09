@@ -4,7 +4,7 @@ import adventofcode.readFile
 import adventofcode.split
 
 fun main(args: Array<String>) {
-    val lines = readFile("src/main/resources/y2022/day2.txt")
+    val lines = readFile("src/main/resources/y2022/day02.txt")
     println("part1=" + lines.sumOf { points(it) })
     println("part2=" + lines.sumOf { pointsPart2(it) })
 }

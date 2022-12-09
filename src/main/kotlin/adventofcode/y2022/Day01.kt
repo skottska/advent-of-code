@@ -4,7 +4,7 @@ import adventofcode.readFile
 
 fun main(args: Array<String>) {
     val elves = mutableListOf(0)
-    readFile("src/main/resources/y2022/day1.txt").forEach { line ->
+    readFile("src/main/resources/y2022/day01.txt").forEach { line ->
         if (line.isNotEmpty()) elves[elves.size - 1] += line.toInt()
         else elves.add(0)
     }

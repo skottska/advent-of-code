@@ -7,7 +7,7 @@ val tripMap = mutableMapOf<Pair<String, String>, Int>()
 var trips = mutableSetOf<Int>()
 
 fun main(args: Array<String>) {
-    val lines = readFile("src/main/resources/y2015/day9.txt")
+    val lines = readFile("src/main/resources/y2015/day09.txt")
     val destinations = mutableSetOf<String>()
     lines.forEach { line ->
         split(line).let {

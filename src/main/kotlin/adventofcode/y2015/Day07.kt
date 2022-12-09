@@ -7,7 +7,7 @@ import adventofcode.split
 val values = mutableMapOf<String, UShort>()
 
 fun main(args: Array<String>) {
-    val lines = readFile("src/main/resources/y2015/day7.txt")
+    val lines = readFile("src/main/resources/y2015/day07.txt")
     println("part1=" + findValue("a", lines))
     values.clear()
     values["b"] = 16076.toUShort()

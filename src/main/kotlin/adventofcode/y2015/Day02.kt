@@ -4,7 +4,7 @@ import adventofcode.matches
 import adventofcode.readFile
 
 fun main(args: Array<String>) {
-    val lines = readFile("src/main/resources/y2015/day2.txt")
+    val lines = readFile("src/main/resources/y2015/day02.txt")
     lines.fold(0) { total, line ->
         val (l, w, h) = dimension(line)
         val side1 = l * h

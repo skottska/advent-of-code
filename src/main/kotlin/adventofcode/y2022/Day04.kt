@@ -3,7 +3,7 @@ package adventofcode.y2022
 import adventofcode.readFile
 
 fun main(args: Array<String>) {
-    val lines = readFile("src/main/resources/y2022/day4.txt")
+    val lines = readFile("src/main/resources/y2022/day04.txt")
     println("part1=" + lines.filter { overlaps(it) }.size)
     println("part2=" + lines.filter { overlapsAtAll(it) }.size)
 }

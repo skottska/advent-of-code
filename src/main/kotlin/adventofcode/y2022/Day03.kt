@@ -3,7 +3,7 @@ package adventofcode.y2022
 import adventofcode.readFile
 
 fun main(args: Array<String>) {
-    val lines = readFile("src/main/resources/y2022/day3.txt")
+    val lines = readFile("src/main/resources/y2022/day03.txt")
     println("part1=" + lines.sumOf { calculatePrio(it) })
     var total = 0
     lines.forEachIndexed { index, line -> if (index % 3 == 0) total += prio(inCommon(line, lines[index + 1], lines[index + 2])) }

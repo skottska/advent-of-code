@@ -4,7 +4,7 @@ import adventofcode.readFile
 
 fun main(args: Array<String>) {
     val grid = mutableListOf<List<Int>>()
-    readFile("src/main/resources/y2022/day8.txt").forEach { line -> grid.add(line.asSequence().map { it.code - '0'.code }.toList()) }
+    readFile("src/main/resources/y2022/day08.txt").forEach { line -> grid.add(line.asSequence().map { it.code - '0'.code }.toList()) }
 
     val transpose = mutableListOf<MutableList<Int>>()
     grid.forEach { line ->

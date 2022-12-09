@@ -4,7 +4,7 @@ import adventofcode.readFile
 import adventofcode.split
 
 fun main(args: Array<String>) {
-    val lines = readFile("src/main/resources/y2022/day7.txt")
+    val lines = readFile("src/main/resources/y2022/day07.txt")
 
     var currentPos = JDirectory("/", null, mutableListOf())
     val topLevel = currentPos.copy()

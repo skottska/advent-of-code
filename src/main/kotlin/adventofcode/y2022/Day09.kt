@@ -10,7 +10,7 @@ fun main(args: Array<String>) {
 }
 
 fun move(numTails: Int): Int {
-    val lines = readFile("src/main/resources/y2022/day9.txt")
+    val lines = readFile("src/main/resources/y2022/day09.txt")
     var posH = Pair(0, 0)
     val tailPoss = MutableList(numTails) { Pair(0, 0) }
     val posVisited = mutableSetOf(Pair(0, 0))
