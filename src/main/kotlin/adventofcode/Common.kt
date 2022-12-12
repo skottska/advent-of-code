@@ -3,6 +3,8 @@ package adventofcode
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
+import kotlin.math.max
+import kotlin.math.min
 
 fun readFile(fileName: String): List<String> = File(fileName).useLines { it.toList() }
 
@@ -16,3 +18,15 @@ fun matches(line: String, regex: String) = Regex(regex)
 fun md5(input: String) = BigInteger(1, MessageDigest.getInstance("MD5").digest(input.toByteArray()))
     .toString(16)
     .padStart(32, '0')
+
+fun maxOfNull(x: Int?, y: Int?) = when {
+    x == null -> y
+    y == null -> x
+    else -> max(x, y)
+}
+
+fun minOfNull(x: Int?, y: Int?) = when {
+    x == null -> y
+    y == null -> x
+    else -> min(x, y)
+}
