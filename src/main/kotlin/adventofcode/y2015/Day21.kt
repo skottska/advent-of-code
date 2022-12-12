@@ -9,11 +9,11 @@ import kotlin.math.max
 fun main(args: Array<String>) {
     val lines = readFile("src/main/resources/y2015/day21.txt")
     val boss = (0..2).map { matches(lines[it], "[0-9]+").first().toInt() }.let { Fighter(it[0], it[1], it[2]) }
-    println("part1="+iterateFight(boss) { you, boss2, cost -> if (winFight(you, boss2)) minOfNull(cost, you.cost)  else cost })
-    println("part2="+iterateFight(boss) { you, boss2, cost -> if (!winFight(you, boss2)) maxOfNull(cost, you.cost) else cost })
+    println("part1="+iterateFight { you, cost -> if (winFight(you, boss)) minOfNull(cost, you.cost)  else cost })
+    println("part2="+iterateFight { you, cost -> if (!winFight(you, boss)) maxOfNull(cost, you.cost) else cost })
 }
 
-private fun iterateFight(boss: Fighter, func: (Fighter, Fighter, Int?) -> Int?): Int? {
+private fun iterateFight(func: (Fighter, Int?) -> Int?): Int? {
     val emptyItem = Item(0, 0, 0)
     val weapons = listOf(8, 10, 25, 40, 74).mapIndexed { index, i ->  Item(i, index + 4, 0)}
     val armour = listOf(13, 31, 53, 75, 102).mapIndexed { index, i ->  Item(i, 0, index + 1)} + emptyItem
@@ -28,7 +28,7 @@ private fun iterateFight(boss: Fighter, func: (Fighter, Fighter, Int?) -> Int?):
                 rings.forEach { ring2 ->
                     if (ring2 == emptyItem || ring2 != ring1) {
                         val newYou = you.addItem(weapon).addItem(armour).addItem(ring1).addItem(ring2)
-                        coins = func(newYou, boss, coins)
+                        coins = func(newYou, coins)
                     }
                 }
             }
