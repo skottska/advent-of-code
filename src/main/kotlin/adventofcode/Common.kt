@@ -6,7 +6,7 @@ import java.security.MessageDigest
 
 fun readFile(fileName: String): List<String> = File(fileName).useLines { it.toList() }
 
-fun split(line: String) = line.split("\\s+".toRegex())
+fun split(line: String) = line.trim().split("\\s+".toRegex())
 
 fun matches(line: String, regex: String) = Regex(regex)
     .findAll(line)
