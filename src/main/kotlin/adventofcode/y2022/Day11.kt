@@ -10,7 +10,7 @@ fun main(args: Array<String>) {
     println("part2=" + monkeyBusiness(lines, 1, 10000))
 }
 
-fun monkeyBusiness(lines: List<String>, divisor: Int, rounds: Int): Long {
+private fun monkeyBusiness(lines: List<String>, divisor: Int, rounds: Int): Long {
     val monkeys = mutableListOf<Monkey>()
     lines.windowed(7, 7, true) { monkey ->
         monkeys.add(
@@ -34,14 +34,14 @@ fun monkeyBusiness(lines: List<String>, divisor: Int, rounds: Int): Long {
     return monkeys.map { it.inspected }.sortedByDescending { it }.let { it[0] * it[1] }
 }
 
-fun parseThrowTo(lines: List<String>): (Long) -> Int {
+private fun parseThrowTo(lines: List<String>): (Long) -> Int {
     val divisible = split(lines[3])[3].toLong()
     val toMonkeyTrue = split(lines[4])[5].toInt()
     val toMonkeyFalse = split(lines[5])[5].toInt()
     return { x -> if (x % divisible == 0L) toMonkeyTrue else toMonkeyFalse }
 }
 
-fun parseOperation(s: String): (Long) -> Long = split(s).let { split ->
+private fun parseOperation(s: String): (Long) -> Long = split(s).let { split ->
     when {
         split[5] == "old" && split[4] == "+" -> { x -> x + x }
         split[5] == "old" -> { x -> x * x }
@@ -50,7 +50,7 @@ fun parseOperation(s: String): (Long) -> Long = split(s).let { split ->
     }
 }
 
-data class Monkey(var items: List<Long>, val operation: (Long) -> Long, val throwTo: (Long) -> Int, val divisor: Int) {
+private data class Monkey(var items: List<Long>, val operation: (Long) -> Long, val throwTo: (Long) -> Int, val divisor: Int) {
     var inspected = 0L
     fun receive(item: Long) { items += item }
     fun throwItems() { inspected += items.size; items = listOf() }

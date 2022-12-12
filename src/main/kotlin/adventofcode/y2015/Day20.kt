@@ -19,8 +19,8 @@ private fun deliverPresents(lowestHouseNumber: Long, part: Int) {
     }
 }
 
-var knownDivisors = mutableMapOf(2L to setOf(2L))
-var primes = mutableSetOf(2L)
+val knownDivisors = mutableMapOf(2L to setOf(2L))
+val primes = mutableSetOf(2L)
 
 private fun findDivisors(x: Long) = (findDivisorsInner(x) + 1L + x).also { knownDivisors[x] = it }
 private fun findDivisorsInner(x: Long): Set<Long> {
