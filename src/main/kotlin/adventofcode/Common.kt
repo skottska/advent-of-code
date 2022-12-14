@@ -32,3 +32,6 @@ fun minOfNull(x: Int?, y: Int?) = when {
     y == null -> x
     else -> min(x, y)
 }
+
+fun anyRange(a: Int, b: Int) = min(a, b)..(max(a, b))
+fun anyRange(a: List<Int>) = a.min()..a.max()
