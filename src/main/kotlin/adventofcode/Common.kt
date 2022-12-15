@@ -16,6 +16,7 @@ fun matches(line: String, regex: String) = Regex(regex)
     .toList()
 
 fun matchNumbers(line: String) = matches(line, "-?[0-9]+").map { it.toInt() }
+fun matchNumbersLong(line: String) = matches(line, "-?[0-9]+").map { it.toLong() }
 
 fun md5(input: String) = BigInteger(1, MessageDigest.getInstance("MD5").digest(input.toByteArray()))
     .toString(16)
@@ -34,4 +35,5 @@ fun minOfNull(x: Int?, y: Int?) = when {
 }
 
 fun anyRange(a: Int, b: Int) = min(a, b)..(max(a, b))
+fun anyRange(a: Long, b: Long) = min(a, b)..(max(a, b))
 fun anyRange(a: List<Int>) = a.min()..a.max()
