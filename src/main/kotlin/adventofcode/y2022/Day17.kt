@@ -3,50 +3,37 @@ package adventofcode.y2022 // ktlint-disable filename
 import adventofcode.readFile
 
 fun main(args: Array<String>) {
+    println("part1="+ iterateBlocks(2022))
+    println("part2="+ iterateBlocks(1000000000000L))
+}
+
+private fun iterateBlocks(maxIters: Long): Long {
     val jets = Jets(readFile("src/main/resources/y2022/day17.txt")[0].map { it })
     val cave = Cave()
     val blocks = Blocks()
-    var time = System.currentTimeMillis()
-    val caveInstances = mutableSetOf<CaveInstance>()
-    (1L..2022L).forEach { i ->
-        val block = moveBlock(jets, blocks.getBlock().start(cave.highestBlock()), cave)
-        //println(block)
-        if (i % 10000000L == 0L) System.currentTimeMillis().let { println("perc="+(1000000000000L/i)+" time="+(System.currentTimeMillis() - time)+" cave="+cave.space.size); time = it }
-        cave.merge(block)
+    val caveInstances = mutableMapOf<CaveInstance, IterationInstance>()
+    var caveInstance: CaveInstance
+    var i = 1L
+    while(true) {
+        cave.merge(moveBlock(jets, blocks.getBlock().start(cave.highestBlock()), cave))
 
-        val maxColumnHeight = cave.space.groupBy { it.first }.map { col -> col.value.maxOf { it.second } }
-        val columnDiffs = maxColumnHeight.map { it - maxColumnHeight.min()}
-        val caveInstance = CaveInstance(jets.jetIndex, blocks.blockIndex, columnDiffs)
+        val maxColumnHeight = cave.maxColumnHeight()
+        caveInstance = CaveInstance(jets.jetIndex, blocks.blockIndex, maxColumnHeight.map { it - maxColumnHeight.min()})
         if (caveInstances.contains(caveInstance)) {
-            println(caveInstance)
+            break
         }
-        caveInstances.add(caveInstance)
+        caveInstances[caveInstance] = IterationInstance(i++, maxColumnHeight)
     }
-    println(cave.highestBlock())
+    val baseIter = caveInstances.getValue(caveInstance).iteration
+    val loopIter = i - baseIter
+    val leftOverIter = (maxIters - baseIter) % loopIter
+    val maxColumn = getIterationInstance(caveInstances, baseIter + leftOverIter).columnHeights.let { it.indexOf(it.max()) }
+    val columnHeight = {iter: Long -> getIterationInstance(caveInstances, iter).columnHeights[maxColumn]}
+
+    return columnHeight(baseIter + leftOverIter) + (cave.maxColumnHeight()[maxColumn] - columnHeight(baseIter)) * ((maxIters - baseIter) / loopIter)
 }
 
-fun part1() {
-    val jets = Jets(readFile("src/main/resources/y2022/day17.txt")[0].map { it })
-    val cave = Cave()
-    val blocks = Blocks()
-    var time = System.currentTimeMillis()
-    val caveInstances = mutableSetOf<CaveInstance>()
-    (1L..2022L).forEach { i ->
-        val block = moveBlock(jets, blocks.getBlock().start(cave.highestBlock()), cave)
-        //println(block)
-        if (i % 10000000L == 0L) System.currentTimeMillis().let { println("perc="+(1000000000000L/i)+" time="+(System.currentTimeMillis() - time)+" cave="+cave.space.size); time = it }
-        cave.merge(block)
-
-        val maxColumnHeight = cave.space.groupBy { it.first }.map { col -> col.value.maxOf { it.second } }
-        val columnDiffs = maxColumnHeight.map { it - maxColumnHeight.min()}
-        val caveInstance = CaveInstance(jets.jetIndex, blocks.blockIndex, columnDiffs)
-        if (caveInstances.contains(caveInstance)) {
-            println(caveInstance)
-        }
-        caveInstances.add(caveInstance)
-    }
-    println(cave.highestBlock())
-}
+private fun getIterationInstance(caveInstances: Map<CaveInstance, IterationInstance>, iter: Long) = caveInstances.filter { it.value.iteration == iter }.values.first()
 
 private fun moveBlock(jets: Jets, block: Block, cave: Cave): Block {
     val newBlock = when (jets.getJet()) {
@@ -93,6 +80,8 @@ private data class Cave(val space: MutableList<Pair<Long, Long>> = mutableListOf
             space.removeIf { it.second < maxColumnHeight.min() - 1 }
         }
     }
+    fun maxColumnHeight() = space.groupBy { it.first }.map { col -> col.value.maxOf { it.second } }
 }
 
 private data class CaveInstance(val jetIndex: Int, val blockIndex: Int, val columnDiffs: List<Long>)
+private data class IterationInstance(val iteration: Long, val columnHeights: List<Long>)
