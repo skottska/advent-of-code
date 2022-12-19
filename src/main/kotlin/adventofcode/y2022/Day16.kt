@@ -94,17 +94,17 @@ private fun populateShortestRoutesInternal(a: String, b: String, valves: Map<Str
 
 private fun getShortestRoute(a: String, b: String): Int {
     if (a == b) return 0
-    return shortestRoutes[Pair(min(a, b), max(a, b))] ?: throw IllegalArgumentException("Can't find route from $a to $b")
+    return shortestRoutes[Pair(minString(a, b), maxString(a, b))] ?: throw IllegalArgumentException("Can't find route from $a to $b")
 }
 
 private fun addShortestRoute(a: String, b: String, dist: Int): Boolean {
     if (a == b) return false
-    val p = Pair(min(a, b), max(a, b))
+    val p = Pair(minString(a, b), maxString(a, b))
     if (shortestRoutes[p]?.let { it >= dist } != false) { shortestRoutes[p] = dist; return true }
     return false
 }
-private fun min(a: String, b: String) = if (a <= b) a else b
-private fun max(a: String, b: String) = if (a >= b) a else b
+private fun minString(a: String, b: String) = if (a <= b) a else b
+private fun maxString(a: String, b: String) = if (a >= b) a else b
 
 private fun Map<String, Valve>.open(openers: List<Opener>) = openers.fold(this) { total, it -> total.open(it) }
 private fun Map<String, Valve>.open(opener: Opener) = map { it.key to if (it.key == opener.currentValve) it.value.copy(isOpen = true) else it.value }.toMap()
