@@ -5,33 +5,36 @@ import adventofcode.readFile
 
 fun main(args: Array<String>) {
     val lines = readFile("src/main/resources/y2022/day19.txt")
-    val bestStates: MutableList<Int> = mutableListOf()
-    var total = 0
 
+    var totalPart1 = 0
+    lines.forEachIndexed { index, line ->
+        val m = matchNumbers(line)
+        val robotBlueprints = listOf(OreRobot(m[1]), ClayRobot(m[2]), ObsidianRobot(m[3], m[4]), GeodeRobot(m[5], m[6]))
+        val robots: List<Robot> = listOf(robotBlueprints.first())
+        iterate(robotBlueprints, robots, 24)
+        println("i=" + (index + 1) + " " + maxGeodes)
+        totalPart1 += (index + 1) * maxGeodes
+        maxGeodes = 0
+        totalMineStates.clear()
+    }
+
+    println("part1=$totalPart1")
+
+    var totalPart2 = 1
     (0..2).forEach {
         val line = lines[it]
         val m = matchNumbers(line)
         val robotBlueprints = listOf(OreRobot(m[1]), ClayRobot(m[2]), ObsidianRobot(m[3], m[4]), GeodeRobot(m[5], m[6]))
         val robots: List<Robot> = listOf(robotBlueprints.first())
         iterate(robotBlueprints, robots, 32)
+        totalPart2 *= maxGeodes
         println("i=" + it + " geodes=" + maxGeodes)
         maxGeodes = 0
         totalMineStates.clear()
     }
-    println("part2=$total")
 
-    lines.forEachIndexed { index, line ->
-        val m = matchNumbers(line)
-        val robotBlueprints = listOf(OreRobot(m[1]), ClayRobot(m[2]), ObsidianRobot(m[3], m[4]), GeodeRobot(m[5], m[6]))
-        val robots: List<Robot> = listOf(robotBlueprints.first())
-        iterate(robotBlueprints, robots, 24)
-        bestStates.add(maxGeodes)
-        println("i=" + (index + 1) + " " + maxGeodes)
-        total += (index + 1) * maxGeodes
-        maxGeodes = 0
-        totalMineStates.clear()
-    }
-    println("part1=$total")
+    println("part1=$totalPart1")
+    println("part2=$totalPart2")
 }
 
 private var maxGeodes = 0
@@ -39,67 +42,64 @@ private val totalMineStates = mutableSetOf<TotalMineState>()
 
 private fun factorial(x: Int) = (2..x).fold(1) { total, i -> total * i }
 
-private fun iterate2(robotBlueprints: List<Robot>, robots: List<Robot>, iters: Int, mineState: MineState = MineState()) {
-    val totalMineState = TotalMineState(mineState, iters, robots)
-    if (totalMineStates.any { isBetter(it, totalMineState) }) {
-        return
-    }
-    totalMineStates.add(totalMineState)
-
-    if (iters < 4 && mineState.geode + factorial(iters + robots.filterIsInstance<GeodeRobot>().size) < maxGeodes) return
-    if (iters == 0) {
-        val temp = maxGeodes
-        maxGeodes = maxOf(maxGeodes, mineState.geode)
-        if (temp != maxGeodes) println("newmax=$maxGeodes mine=$mineState robots=" + robots.groupBy { it.javaClass.simpleName }.map { Pair(it.key, it.value.size) })
-        return
-    }
-    val producedMineState = robots.fold(mineState) { total, i -> i.produce(total) }
-
-    val affordable = robotBlueprints.filter { it.canAfford(mineState) }
-
-    if (robotBlueprints[0].oreCost >= robotBlueprints[1].oreCost && robots.filterIsInstance<OreRobot>().size == 1) {
-        return if (robotBlueprints[0].canAfford(mineState)) iterate2(robotBlueprints, robots + listOf(robotBlueprints[0]), iters - 1, robotBlueprints[0].buy(producedMineState))
-        else iterate2(robotBlueprints, robots, iters - 1, producedMineState)
-    }
-
-    return if (affordable.isEmpty()) iterate2(robotBlueprints, robots, iters - 1, producedMineState)
-    else iterate2(robotBlueprints, robots + listOf(affordable.last()), iters - 1, affordable.last().buy(producedMineState))
-}
-
 private fun iterate(robotBlueprints: List<Robot>, robots: List<Robot>, iters: Int, mineState: MineState = MineState()) {
-    val totalMineState = TotalMineState(mineState, iters, robots)
+    /*val totalMineState = TotalMineState(mineState, iters, robots)
     if (totalMineStates.any { isBetter(it, totalMineState) }) {
         return
     }
-    totalMineStates.add(totalMineState)
-
-    val index = 24 - iters + 1
-    if (iters < 4 && mineState.geode + factorial(iters + robots.filterIsInstance<GeodeRobot>().size) < maxGeodes) return
+    totalMineStates.add(totalMineState)*/
     if (iters == 0) {
         val temp = maxGeodes
         maxGeodes = maxOf(maxGeodes, mineState.geode)
         if (temp != maxGeodes) println("newmax=$maxGeodes mine=$mineState robots=" + robots.groupBy { it.javaClass.simpleName }.map { Pair(it.key, it.value.size) })
         return
     }
+    if (iters < 7 && mineState.geode + factorial(iters - 1 + robots.filterIsInstance<GeodeRobot>().size) < maxGeodes) return
+
     val producedMineState = robots.fold(mineState) { total, i -> i.produce(total) }
-    val geode = robotBlueprints.last()
-    if (geode.canAfford(mineState)) iterate(robotBlueprints, robots + listOf(geode), iters - 1, geode.buy(producedMineState))
+
+    val geodeRobot = robotBlueprints[3] as GeodeRobot
+    val obsidianRobot = robotBlueprints[2] as ObsidianRobot
+    val clayRobot = robotBlueprints[1] as ClayRobot
+    val oreRobot = robotBlueprints[0] as OreRobot
+
+    if (geodeRobot.canAfford(mineState)) {
+        iterate(robotBlueprints, robots + listOf(geodeRobot), iters - 1, geodeRobot.buy(producedMineState))
+    }
     else {
-        if (robotBlueprints[2].canAfford(mineState) && mineState.obsidian < (robotBlueprints[3] as GeodeRobot).obsidianCost * 2) {
-            iterate(robotBlueprints, robots + listOf(robotBlueprints[2]), iters - 1, robotBlueprints[2].buy(producedMineState))
+        if (obsidianRobot.canAfford(mineState) && geodeRobot.obsidianCost > robots.filterIsInstance<ObsidianRobot>().size
+            && mineState.obsidian + robots.filterIsInstance<ObsidianRobot>().size * iters < geodeRobot.obsidianCost * iters
+        ) {
+            iterate(robotBlueprints, robots + listOf(obsidianRobot), iters - 1, obsidianRobot.buy(producedMineState))
+        } else {
+
+            if (clayRobot.canAfford(mineState) && obsidianRobot.clayCost > robots.filterIsInstance<ClayRobot>().size
+                && mineState.clay + robots.filterIsInstance<ClayRobot>().size * iters < obsidianRobot.clayCost * iters
+            ) {
+                iterate(robotBlueprints, robots + listOf(clayRobot), iters - 1, clayRobot.buy(producedMineState))
+            }
+
+            val maxOre = robotBlueprints.maxOf { it.oreCost }
+
+            if (oreRobot.canAfford(mineState) && maxOre > robots.filterIsInstance<OreRobot>().size
+                && mineState.ore + robots.filterIsInstance<OreRobot>().size * iters < maxOre * iters
+            ) {
+                iterate(robotBlueprints, robots + listOf(oreRobot), iters - 1, oreRobot.buy(producedMineState))
+            }
+
+            /*if (mineState.ore < maxOre * 2 && robotBlueprints[0].canAfford(mineState)) {
+        iterate(robotBlueprints, robots + listOf(robotBlueprints[0]), iters - 1, robotBlueprints[0].buy(producedMineState))
+    }*/
+
+           // if (!geodeRobot.canAfford(mineState) && mineState.ore < maxOre * 4)
+                iterate(
+                robotBlueprints,
+                robots,
+                iters - 1,
+                producedMineState
+            )
+
         }
-
-        if (mineState.clay < (robotBlueprints[2] as ObsidianRobot).clayCost * 2 && robotBlueprints[1].canAfford(mineState)) {
-            iterate(robotBlueprints, robots + listOf(robotBlueprints[1]), iters - 1, robotBlueprints[1].buy(producedMineState))
-        }
-
-        val minOre = robotBlueprints.maxOf { it.oreCost } + robotBlueprints[0].oreCost + 1
-
-        if (mineState.ore < minOre * 2 && robotBlueprints[0].canAfford(mineState)) {
-            iterate(robotBlueprints, robots + listOf(robotBlueprints[0]), iters - 1, robotBlueprints[0].buy(producedMineState))
-        }
-
-        if (!geode.canAfford(mineState) && mineState.ore < minOre) iterate(robotBlueprints, robots, iters - 1, producedMineState)
     }
 }
 
