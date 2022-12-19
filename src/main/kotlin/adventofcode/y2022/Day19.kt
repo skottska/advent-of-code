@@ -2,6 +2,7 @@ package adventofcode.y2022 // ktlint-disable filename
 
 import adventofcode.matchNumbers
 import adventofcode.readFile
+import kotlin.math.min
 
 fun main(args: Array<String>) {
     val lines = readFile("src/main/resources/y2022/day19.txt")
@@ -43,11 +44,11 @@ private val totalMineStates = mutableSetOf<TotalMineState>()
 private fun factorial(x: Int) = (2..x).fold(1) { total, i -> total * i }
 
 private fun iterate(robotBlueprints: List<Robot>, robots: List<Robot>, iters: Int, mineState: MineState = MineState()) {
-    /*val totalMineState = TotalMineState(mineState, iters, robots)
-    if (totalMineStates.any { isBetter(it, totalMineState) }) {
+    val totalMineState = TotalMineState(mineState.prune(robotBlueprints), iters, robots)
+    if (totalMineStates.contains(totalMineState)) {
         return
     }
-    totalMineStates.add(totalMineState)*/
+    totalMineStates.add(totalMineState)
     if (iters == 0) {
         val temp = maxGeodes
         maxGeodes = maxOf(maxGeodes, mineState.geode)
@@ -66,12 +67,11 @@ private fun iterate(robotBlueprints: List<Robot>, robots: List<Robot>, iters: In
     if (geodeRobot.canAfford(mineState)) {
         iterate(robotBlueprints, robots + listOf(geodeRobot), iters - 1, geodeRobot.buy(producedMineState))
     }
-    else {
         if (obsidianRobot.canAfford(mineState) && geodeRobot.obsidianCost > robots.filterIsInstance<ObsidianRobot>().size
             && mineState.obsidian + robots.filterIsInstance<ObsidianRobot>().size * iters < geodeRobot.obsidianCost * iters
         ) {
             iterate(robotBlueprints, robots + listOf(obsidianRobot), iters - 1, obsidianRobot.buy(producedMineState))
-        } else {
+        }
 
             if (clayRobot.canAfford(mineState) && obsidianRobot.clayCost > robots.filterIsInstance<ClayRobot>().size
                 && mineState.clay + robots.filterIsInstance<ClayRobot>().size * iters < obsidianRobot.clayCost * iters
@@ -99,24 +99,18 @@ private fun iterate(robotBlueprints: List<Robot>, robots: List<Robot>, iters: In
                 producedMineState
             )
 
-        }
-    }
+
 }
 
-private fun isBetter(a: TotalMineState, b: TotalMineState) = when {
-    a.iter < b.iter -> false
-    a.mineState.ore < b.mineState.ore -> false
-    a.mineState.clay < b.mineState.clay -> false
-    a.mineState.obsidian < b.mineState.obsidian -> false
-    a.mineState.geode < b.mineState.geode -> false
-    a.robots.filterIsInstance<OreRobot>().size < b.robots.filterIsInstance<OreRobot>().size -> false
-    a.robots.filterIsInstance<ClayRobot>().size < b.robots.filterIsInstance<ClayRobot>().size -> false
-    a.robots.filterIsInstance<ObsidianRobot>().size < b.robots.filterIsInstance<ObsidianRobot>().size -> false
-    a.robots.filterIsInstance<GeodeRobot>().size < b.robots.filterIsInstance<GeodeRobot>().size -> false
-    else -> true
-}
 private data class TotalMineState(val mineState: MineState, val iter: Int, val robots: List<Robot>)
-private data class MineState(val ore: Int = 0, val clay: Int = 0, val obsidian: Int = 0, val geode: Int = 0)
+private data class MineState(val ore: Int = 0, val clay: Int = 0, val obsidian: Int = 0, val geode: Int = 0) {
+    fun prune(robotBlueprints: List<Robot>) = MineState(
+        ore = min(ore, robotBlueprints.maxOf { it.oreCost }),
+        clay = min(clay, (robotBlueprints[2] as ObsidianRobot).clayCost),
+        obsidian = min(obsidian, (robotBlueprints[3] as GeodeRobot).obsidianCost),
+        geode = geode
+    )
+}
 private sealed interface Robot {
     val oreCost: Int
     fun canAfford(mineState: MineState): Boolean
