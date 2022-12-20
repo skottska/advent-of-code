@@ -1,53 +1,53 @@
 package adventofcode.y2022 // ktlint-disable filename
 
 import adventofcode.readFile
-import java.util.*
 
 fun main(args: Array<String>) {
-    var lines = readFile("src/main/resources/y2022/day20.txt").map { Pair(it.toInt(), false) }.toMutableList()
+    var lines = readFile("src/main/resources/y2022/day20.txt").mapIndexed { i, it -> Pair(it.toLong(), i) }.toMutableList()
     val numLines = lines.size
-    println("0,5 "+lines.subList(0,5))
-    println("5,7 "+lines.subList(5,7))
 
-    while (lines.any { !it.second }) {
-        val index = lines.indexOfFirst { !it.second }
+    (0 until lines.size).forEach { i ->
+        val index = lines.indexOfFirst { it.second == i }
         val value = lines[index]
         val toPos = toPos(value.first, index, numLines)
-        lines = insertInto(lines, Pair(value.first, true), index, toPos)
-        println(lines.map { it.first })
+        lines = insertInto(lines, value, index, toPos)
     }
-    println(lines.map { it.first })
-    val func = { value: Int -> toPos(value, lines.indexOfFirst { it.first == 0 }, numLines).let { lines[it].first }}
-    println(""+func(1000) + " "+func(2000) + " "+func(3000))
-    println(func(1000) + func(2000) + func(3000))
+    println("part1="+ findAnswer(lines))
 
-    val lines2 = (1..(1 +3000/numLines)).fold(lines.toList()) { total, _ -> total + lines}
-    val indexOf0 = lines.indexOfFirst { it.first == 0 }
-    println(""+lines2[indexOf0 + 1000].first + " "+lines2[indexOf0 + 2000].first + " "+lines2[indexOf0 + 3000].first)
-    println(lines2[indexOf0 + 1000].first + lines2[indexOf0 + 2000].first + lines2[indexOf0 + 3000].first)
+    lines = readFile("src/main/resources/y2022/day20.txt").mapIndexed { i, it -> Pair(it.toLong() * 811589153L, i) }.toMutableList()
+    repeat(10) {
+        (0 until lines.size).forEach { i ->
+            val index = lines.indexOfFirst { it.second == i }
+            val value = lines[index]
+            val toPos = toPos(value.first, index, numLines)
+            lines = insertInto(lines, value, index, toPos)
+        }
+    }
+    println("part2="+ findAnswer(lines))
 }
 
-private fun <T> insertInto(l : MutableList<T>, x: T, from: Int, to: Int): MutableList<T> {
-    if (from == to) {
-        l[from] = x
-        return l
-    }
-    if (from < to ) {
+private fun findAnswer(lines: List<Pair<Long, Int>>): Long {
+    val lines2 = (1..(1 +3000/lines.size)).fold(lines.toList()) { total, _ -> total + lines}
+    val indexOf0 = lines.indexOfFirst { it.first == 0L }
+    return lines2[indexOf0 + 1000].first + lines2[indexOf0 + 2000].first + lines2[indexOf0 + 3000].first
+}
+
+private fun <T> insertInto(l: MutableList<T>, x: T, from: Int, to: Int): MutableList<T> {
+    if (from == to) return l
+    if (from < to) {
         l.removeAt(from)
-        val r = (l.subList(0, to) + listOf(x) + l.subList(to, l.size)).toMutableList()
-        return r
+        return (l.subList(0, to) + listOf(x) + l.subList(to, l.size)).toMutableList()
     }
-    val r = if (to == 0) (l + listOf(x)).toMutableList().also { it.removeAt(from) }
+    return if (to == 0) (l + listOf(x)).toMutableList().also { it.removeAt(from) }
     else (l.subList(0, to) + listOf(x) + l.subList(to, l.size)).toMutableList().also { it.removeAt(from + 1) }
-    return r
 }
 
-private fun toPos(value: Int, index: Int, numLines: Int): Int {
-    val mod = value % (numLines - 1)
+// As first and last pos are effectively the same, we need to add or remove 1 as appropriate to account for that
+private fun toPos(value: Long, index: Int, numLines: Int): Int {
+    val mod = (value % (numLines - 1)).toInt()
     val newPos = mod + index
     return when {
-        //newPos == 0 -> numLines - 1
-        newPos > numLines -> newPos - numLines + 1
+        newPos >= numLines -> newPos - numLines + 1
         newPos >= 1 -> newPos
         else -> numLines + newPos - 1
     }
