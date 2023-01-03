@@ -6,19 +6,19 @@ import kotlin.math.abs
 
 fun main(args: Array<String>) {
     val lines = readFile("src/main/resources/y2022/day18.txt")
-    val coords = lines.map { line -> matchNumbers(line).let { Coord(it[0], it[1], it[2]) } }
-    val sides = coords.fold(0) {total, it -> total + freeSides(it, coords)}
+    val coords = lines.map { line -> matchNumbers(line).let { Coord3D(it[0], it[1], it[2]) } }
+    val sides = coords.fold(0) { total, it -> total + freeSides(it, coords) }
     println("part1=$sides")
 
-    val totalBubbles = mutableListOf<Coord>()
+    val totalBubbles = mutableListOf<Coord3D>()
     val zs = coords.map { it.z }
     (zs.min()..zs.max()).forEach { z ->
         val xs = coords.filter { it.z == z }.map { it.x }
-        (xs.min()..xs.max()).forEach {x ->
+        (xs.min()..xs.max()).forEach { x ->
             val ys = coords.filter { it.z == z && it.x == x }.map { it.y }
             if (ys.isNotEmpty()) {
                 (ys.min()..ys.max()).forEach { y ->
-                    val c = Coord(x, y, z)
+                    val c = Coord3D(x, y, z)
                     if (!coords.contains(c)) totalBubbles.add(c)
                 }
             }
@@ -35,12 +35,12 @@ fun main(args: Array<String>) {
     }
 
     val bubbleSides = insideBubbles.sumOf { group -> group.sumOf { 6 - freeSides(it, coords) } }
-    println("part2="+(sides-bubbleSides))
+    println("part2=" + (sides - bubbleSides))
 }
 
-private fun groupBubbles(bubbles: List<Coord>): Set<Set<Coord>> {
+private fun groupBubbles(bubbles: List<Coord3D>): Set<Set<Coord3D>> {
     val restBubbles = bubbles.toMutableSet()
-    val bubbleGroups = mutableSetOf<MutableSet<Coord>>()
+    val bubbleGroups = mutableSetOf<MutableSet<Coord3D>>()
     while (restBubbles.isNotEmpty()) {
         val bubble = restBubbles.first()
         val bubbleGroup = mutableSetOf(bubble)
@@ -52,15 +52,15 @@ private fun groupBubbles(bubbles: List<Coord>): Set<Set<Coord>> {
     return bubbleGroups
 }
 
-private fun groupBubblesInner(bubble: Coord, bubbleGroup: Set<Coord>, rest: Set<Coord>): Set<Coord> {
+private fun groupBubblesInner(bubble: Coord3D, bubbleGroup: Set<Coord3D>, rest: Set<Coord3D>): Set<Coord3D> {
     val newBubbles = rest.filter { it.isAdjacent(bubble) }
-    return newBubbles.fold(bubbleGroup + newBubbles) {total, i -> groupBubblesInner(i, total, rest - total) }
+    return newBubbles.fold(bubbleGroup + newBubbles) { total, i -> groupBubblesInner(i, total, rest - total) }
 }
 
-private fun freeSides(c: Coord, cs: List<Coord>) = cs.fold(6) { total, it -> total - if (c.isAdjacent(it)) 1 else 0 }
+private fun freeSides(c: Coord3D, cs: List<Coord3D>) = cs.fold(6) { total, it -> total - if (c.isAdjacent(it)) 1 else 0 }
 
-private data class Coord(val x: Int, val y: Int, val z: Int) {
-    fun isAdjacent(c: Coord) =
+private data class Coord3D(val x: Int, val y: Int, val z: Int) {
+    fun isAdjacent(c: Coord3D) =
         when {
             listOf(x == c.x, y == c.y, z == c.z).filter { it }.size != 2 -> false
             else -> abs((x + y + z) - (c.x + c.y + c.z)) == 1
