@@ -3,7 +3,8 @@ package adventofcode.y2022 // ktlint-disable filename
 import adventofcode.matches
 import adventofcode.readFile
 
-/*private val cubeFaces = mapOf(
+/* For test input
+private val cubeFaces = mapOf(
     '1' to Pair(Pair(0, 8), Pair(3, 11)),
     '2' to Pair(Pair(4, 0), Pair(7, 3)),
     '3' to Pair(Pair(4, 4), Pair(7, 7)),
@@ -21,7 +22,6 @@ private val cubeFaces = mapOf(
     '6' to Pair(Pair(150, 0), Pair(199, 49))
 )
 
-// Part2 incomplete
 fun main(args: Array<String>) {
     val lines = readFile("src/main/resources/y2022/day22.txt")
 
@@ -31,7 +31,7 @@ fun main(args: Array<String>) {
         if (it.size == maxWidth) it
         else it + List(maxWidth - it.size) { Space.EMPTY }
     }
-    //println("part1=" + iterate(paddedGrid, lines, isPart1 = true))
+    println("part1=" + iterate(paddedGrid, lines, isPart1 = true))
     println("part2=" + iterate(paddedGrid, lines, isPart1 = false))
 }
 
@@ -43,12 +43,12 @@ private fun iterate(grid: List<List<Space>>, lines: List<String>, isPart1: Boole
             else -> pos.turnLeft()
         }
         val spacesToMove = it.substring(1, it.length).toInt()
-        println("${pos.facing} $spacesToMove")
+        // println("${pos.facing} $spacesToMove")
         repeat(spacesToMove) {
             val newPos = if (isPart1) movePart1(pos, grid) else movePart2(pos, grid)
             if (grid[newPos.row][newPos.col] == Space.PATH) pos = newPos
         }
-        println(pos.copy(row = pos.row + 1, col = pos.col + 1))
+        // println(pos.copy(row = pos.row + 1, col = pos.col + 1))
     }
     return 1000 * (pos.row + 1) + 4 * (pos.col + 1) + pos.facing.value
 }
@@ -80,10 +80,11 @@ private data class Position(val row: Int, val col: Int, val facing: Facing) {
             it.value.first.second <= col && it.value.second.second >= col
     }.keys.first()
 
-    /*fun cubeFaceMove(grid: List<List<Space>>): Position {
+    /* For test input
+    fun cubeFaceMove(): Position {
         val cubeFace = cubeFace()
         return when {
-            cubeFace == '1' && facing == Facing.UP -> copy(row = grid.size - 1)
+            cubeFace == '1' && facing == Facing.UP -> copy(row = 11)
             cubeFace == '1' && facing == Facing.RIGHT -> copy(row = 11 - row, col = 15, facing = Facing.LEFT)
             cubeFace == '1' && facing == Facing.LEFT -> copy(row = 4, col = row + 4, facing = Facing.DOWN)
 
@@ -102,10 +103,10 @@ private data class Position(val row: Int, val col: Int, val facing: Facing) {
 
             cubeFace == '2' && facing == Facing.UP -> copy(row = 199, col = col - 100, facing = Facing.UP)
             cubeFace == '2' && facing == Facing.RIGHT -> copy(row = 149 - row, col = 99, facing = Facing.LEFT)
-            cubeFace == '2' && facing == Facing.DOWN -> copy(row = col, col = 99, facing = Facing.LEFT)
+            cubeFace == '2' && facing == Facing.DOWN -> copy(row = col - 50, col = 99, facing = Facing.LEFT)
 
             cubeFace == '3' && facing == Facing.LEFT -> copy(row = 100, col = row - 50, facing = Facing.DOWN)
-            cubeFace == '3' && facing == Facing.RIGHT -> copy(row = 49, col = row, facing = Facing.UP)
+            cubeFace == '3' && facing == Facing.RIGHT -> copy(row = 49, col = row + 50, facing = Facing.UP)
 
             cubeFace == '4' && facing == Facing.UP -> copy(row = col + 50, col = 50, facing = Facing.RIGHT)
             cubeFace == '4' && facing == Facing.LEFT -> copy(row = 149 - row, col = 50, facing = Facing.RIGHT)
