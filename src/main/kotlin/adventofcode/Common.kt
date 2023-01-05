@@ -38,3 +38,5 @@ fun anyRange(a: Int, b: Int) = min(a, b)..(max(a, b))
 fun anyRange(a: Long, b: Long) = min(a, b)..(max(a, b))
 fun anyRange(a: List<Int>) = a.min()..a.max()
 data class Coord(val row: Int, val col: Int)
+
+fun <T> transpose(l: List<List<T>>) = (0 until l.first().size).map { colIndex -> l.map { it[colIndex] } }
