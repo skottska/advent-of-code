@@ -28,8 +28,4 @@ fun trip(soFar: List<String>, left: List<String>) {
 
 fun distance(from: String, to: String) = tripMap[Pair(from, to)] ?: tripMap[Pair(to, from)] ?: 0
 
-fun totalDistance(list: List<String>): Int {
-    var total = 0
-    list.windowed(2, 1) { window -> total += distance(window.first(), window.last()) }
-    return total
-}
+fun totalDistance(list: List<String>) = list.windowed(2, 1).fold(0) { total, window -> total + distance(window.first(), window.last()) }

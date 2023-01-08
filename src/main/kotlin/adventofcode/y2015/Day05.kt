@@ -22,12 +22,6 @@ fun isNicePart2(line: String) = when {
     else -> true
 }
 
-fun inTheMiddle(line: String): Boolean {
-    line.windowed(3, 1).forEach { if (it[0] == it[2]) return true }; return false
-}
+fun inTheMiddle(line: String) = line.windowed(3, 1).any { it[0] == it[2] }
 
-fun duplicatePair(line: String): Boolean {
-    line.windowed(3, 1)
-        .forEach { if (it.any { c -> it.first() != c } && matches(line, "" + it[0] + it[1]).size > 1) return true }
-    return false
-}
+fun duplicatePair(line: String) = line.windowed(3, 1).any { it.any { c -> it.first() != c } && matches(line, "" + it[0] + it[1]).size > 1 }

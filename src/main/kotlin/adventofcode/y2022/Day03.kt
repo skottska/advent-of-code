@@ -16,10 +16,7 @@ fun calculatePrio(line: String): Int {
     val firstHalf = line.substring(0, line.length / 2)
     val secondHalf = line.substring(line.length / 2, line.length)
 
-    return firstHalf.toSet().sumOf {
-        if (secondHalf.contains(it)) prio(it)
-        else 0
-    }
+    return firstHalf.toSet().sumOf { if (secondHalf.contains(it)) prio(it) else 0 }
 }
 
 fun prio(char: Char) = when (char) {

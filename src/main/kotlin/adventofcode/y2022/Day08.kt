@@ -1,19 +1,12 @@
 package adventofcode.y2022
 
 import adventofcode.readFile
+import adventofcode.transpose
 
 fun main(args: Array<String>) {
     val grid = mutableListOf<List<Int>>()
     readFile("src/main/resources/y2022/day08.txt").forEach { line -> grid.add(line.asSequence().map { it.code - '0'.code }.toList()) }
-
-    val transpose = mutableListOf<MutableList<Int>>()
-    grid.forEach { line ->
-        line.forEachIndexed { y, i ->
-            if (transpose.getOrNull(y) == null) transpose.add(y, mutableListOf())
-            transpose[y].add(i)
-        }
-    }
-    println("part1=" + (numVisible(grid, false) + numVisible(transpose, true)).size)
+    println("part1=" + (numVisible(grid, false) + numVisible(transpose(grid), true)).size)
 
     var highestScore = 0
     grid.forEachIndexed { x, line ->
