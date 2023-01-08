@@ -16,6 +16,7 @@ fun matches(line: String, regex: String) = Regex(regex)
     .toList()
 
 fun matchNumbers(line: String) = matches(line, "-?[0-9]+").map { it.toInt() }
+fun matchPositiveNumbers(line: String) = matches(line, "[0-9]+").map { it.toInt() }
 fun matchNumbersLong(line: String) = matches(line, "-?[0-9]+").map { it.toLong() }
 
 fun md5(input: String) = BigInteger(1, MessageDigest.getInstance("MD5").digest(input.toByteArray()))
