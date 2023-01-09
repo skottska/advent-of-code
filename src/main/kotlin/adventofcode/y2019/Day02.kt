@@ -6,8 +6,8 @@ import java.lang.IllegalArgumentException
 
 fun main(args: Array<String>) {
     val line = matchNumbers(readFile("src/main/resources/y2019/day02.txt")[0])
-    println("part1="+ runProgram(line.toMutableList(), 12, 2))
-    println("part2="+ (0..99).flatMap { noun ->
+    println("part1=" + runProgram(line.toMutableList(), 12, 2))
+    println("part2=" + (0..99).flatMap { noun ->
         (0..99).mapNotNull { verb ->
             if (runProgram(line.toMutableList(), noun, verb) == 19690720) 100 * noun + verb else null
         }
@@ -19,9 +19,9 @@ private fun runProgram(nums: MutableList<Int>, noun: Int, verb: Int): Int {
     var index = 0
     while (nums[index] != 99) {
         when (nums[index]) {
-            1 -> nums[nums[index+3]] = nums[nums[index+1]] + nums[nums[index+2]]
-            2 -> nums[nums[index+3]] = nums[nums[index+1]] * nums[nums[index+2]]
-            else -> throw IllegalArgumentException("Don't know what to do with "+nums[index])
+            1 -> nums[nums[index + 3]] = nums[nums[index + 1]] + nums[nums[index + 2]]
+            2 -> nums[nums[index + 3]] = nums[nums[index + 1]] * nums[nums[index + 2]]
+            else -> throw IllegalArgumentException("Don't know what to do with " + nums[index])
         }
         index += 4
     }
