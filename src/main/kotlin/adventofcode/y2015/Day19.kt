@@ -3,7 +3,7 @@ package adventofcode.y2015 // ktlint-disable filename
 import adventofcode.readFile
 import adventofcode.split
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2015/day19.txt")
 
     val placements = mutableListOf<Pair<String, String>>()

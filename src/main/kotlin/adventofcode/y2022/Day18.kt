@@ -4,7 +4,7 @@ import adventofcode.matchNumbers
 import adventofcode.readFile
 import kotlin.math.abs
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2022/day18.txt")
     val coords = lines.map { line -> matchNumbers(line).let { Coord3D(it[0], it[1], it[2]) } }
     val sides = coords.fold(0) { total, it -> total + freeSides(it, coords) }

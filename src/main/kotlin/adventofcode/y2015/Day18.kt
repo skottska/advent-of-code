@@ -2,7 +2,7 @@ package adventofcode.y2015 // ktlint-disable filename
 
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val files = readFile("src/main/resources/y2015/day18.txt")
     var grid = files.map { it.map { c -> c } }
     repeat(100) { grid = gridMap(grid, brokenCorners = false) }

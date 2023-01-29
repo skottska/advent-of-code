@@ -4,7 +4,7 @@ import adventofcode.matchNumbers
 import adventofcode.readFile
 import kotlin.math.min
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2022/day19.txt")
 
     var totalPart1 = 0

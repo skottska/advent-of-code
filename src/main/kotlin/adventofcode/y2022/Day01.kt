@@ -2,7 +2,7 @@ package adventofcode.y2022 // ktlint-disable filename
 
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val elves = mutableListOf(0)
     readFile("src/main/resources/y2022/day01.txt").forEach { line ->
         if (line.isNotEmpty()) elves[elves.size - 1] += line.toInt()

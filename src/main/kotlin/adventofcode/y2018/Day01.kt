@@ -3,7 +3,7 @@ package adventofcode.y2018 // ktlint-disable filename
 import adventofcode.matchNumbers
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2018/day01.txt").map { matchNumbers(it).first() }
     println("part1=" + lines.sum())
     var cur = 0

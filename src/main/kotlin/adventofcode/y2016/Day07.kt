@@ -3,7 +3,7 @@ package adventofcode.y2016 // ktlint-disable filename
 import adventofcode.matches
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2016/day07.txt")
     val insAndOutsFunc = { s: String -> matches(s, "\\[[a-z]+\\]") to (matches(s, "[a-z]+\\[") + matches(s, "\\][a-z]+")) }
     println(

@@ -22,7 +22,7 @@ private val cubeFaces = mapOf(
     '6' to Pair(Pair(150, 0), Pair(199, 49))
 )
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2022/day22.txt")
 
     val grid = lines.filter { it.isNotEmpty() && it.contains('.') }.map { s -> s.map { c -> Space.fromChar(c) } }

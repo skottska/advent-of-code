@@ -3,7 +3,7 @@ package adventofcode.y2015 // ktlint-disable filename
 import adventofcode.matchNumbers
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val packages = readFile("src/main/resources/y2015/day24.txt").map { matchNumbers(it) }.flatten()
     println(arrangePackagesTriple(packages))
     println(arrangePackagesQuad(packages))

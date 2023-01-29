@@ -4,7 +4,7 @@ import adventofcode.matchPositiveNumbers
 import adventofcode.readFile
 import adventofcode.split
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2020/day02.txt")
     println("part1="+lines.count { line ->
         val split = split(line)

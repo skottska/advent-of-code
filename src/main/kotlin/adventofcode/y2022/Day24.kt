@@ -3,7 +3,7 @@ package adventofcode.y2022 // ktlint-disable filename
 import adventofcode.Coord
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2022/day24.txt")
 
     val start = Coord(0, lines.first().indexOf('.'))

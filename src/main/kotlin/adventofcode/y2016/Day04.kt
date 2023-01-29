@@ -3,7 +3,7 @@ package adventofcode.y2016 // ktlint-disable filename
 import adventofcode.matches
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2016/day04.txt")
     val part1 = lines.sumOf { line ->
         val alphas = matches(line, "[a-z\\-]+")

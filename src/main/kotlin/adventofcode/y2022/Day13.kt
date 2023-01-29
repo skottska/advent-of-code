@@ -4,7 +4,7 @@ import adventofcode.readFile
 import org.json.JSONArray
 import org.json.JSONObject
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2022/day13.txt")
     val result1 = mutableListOf<Int>()
     val packets = mutableListOf<String>()

@@ -4,7 +4,7 @@ import adventofcode.matchNumbers
 import adventofcode.readFile
 import java.lang.IllegalArgumentException
 
-fun main(args: Array<String>) {
+fun main() {
     val line = matchNumbers(readFile("src/main/resources/y2019/day02.txt")[0])
     println("part1=" + runProgram(line.toMutableList(), 12, 2))
     println("part2=" + (0..99).flatMap { noun ->

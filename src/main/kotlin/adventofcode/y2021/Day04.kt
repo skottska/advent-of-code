@@ -4,7 +4,7 @@ import adventofcode.matchNumbers
 import adventofcode.readFile
 import adventofcode.transpose
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2021/day04.txt")
     val winningNumbers = matchNumbers(lines[0])
     val boards = (0..(lines.size - 7)/6).map { index -> BingoBoard((1..5).map { matchNumbers(lines[1 + index * 6 + it]) }) }

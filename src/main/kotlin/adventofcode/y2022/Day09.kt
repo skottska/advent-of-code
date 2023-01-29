@@ -4,7 +4,7 @@ import adventofcode.readFile
 import adventofcode.split
 import kotlin.math.abs
 
-fun main(args: Array<String>) {
+fun main() {
     println("part1=" + move(1))
     println("part2=" + move(9))
 }

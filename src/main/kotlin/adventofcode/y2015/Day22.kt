@@ -5,12 +5,12 @@ import adventofcode.readFile
 import kotlin.math.max
 import kotlin.math.min
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2015/day22.txt")
     val boss = lines.map { matches(it, "[0-9]+").first().toInt() }.let { Boss(it[0], it[1]) }
     val spells = listOf(
         TurnsSpell(229, 5, { fight: Fight -> fight.increaseMana(101) }),
-        TurnsSpell(113, 6, {fight: Fight ->  fight.adjustArmour(7) }, {fight: Fight -> fight.adjustArmour(0) }),
+        TurnsSpell(113, 6, { fight: Fight -> fight.adjustArmour(7) }, { fight: Fight -> fight.adjustArmour(0) }),
         DirectSpell(53) { fight: Fight -> fight.damageBoss(4)},
         DirectSpell(73) { fight: Fight -> fight.drain(2)},
         TurnsSpell(173, 6, { fight: Fight -> fight.damageBoss(3) }),
@@ -68,7 +68,7 @@ private data class Fight(val wizard: Wizard, val boss: Boss, val activeSpells: L
     fun drain(hp: Int) = copy(wizard = wizard.copy(hp = wizard.hp + hp), boss = boss.copy(hp = boss.hp - hp))
     fun increaseMana(mana: Int) = copy(wizard = wizard.copy(mana = wizard.mana + mana))
     fun adjustArmour(amount: Int) = copy(wizard = wizard.copy(armour = amount))
-    fun applySpell(spell: Spell) = when(spell) {
+    fun applySpell(spell: Spell) = when (spell) {
         is DirectSpell -> spell.castSpell(this).let { it.copy(manaSpent = manaSpent + spell.mana, wizard = it.wizard.copy(mana = it.wizard.mana - spell.mana)) }
         is TurnsSpell -> copy(activeSpells = activeSpells + listOf(spell), wizard = wizard.copy(mana = wizard.mana - spell.mana), manaSpent = manaSpent + spell.mana)
     }

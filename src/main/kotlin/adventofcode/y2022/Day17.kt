@@ -2,7 +2,7 @@ package adventofcode.y2022 // ktlint-disable filename
 
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     println("part1="+ iterateBlocks(2022))
     println("part2="+ iterateBlocks(1000000000000L))
 }

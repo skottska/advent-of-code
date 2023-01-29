@@ -2,7 +2,7 @@ package adventofcode.y2022 // ktlint-disable filename
 
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     println("part1=" + stacks(multiplePickup = false))
     println("part2=" + stacks(multiplePickup = true))
 }

@@ -3,7 +3,7 @@ package adventofcode.y2015 // ktlint-disable filename
 import adventofcode.matches
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2015/day14.txt")
     println("part1=" + travel(lines, 2503).max())
 

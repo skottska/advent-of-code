@@ -4,7 +4,7 @@ import adventofcode.matchNumbers
 import adventofcode.readFile
 import java.math.BigInteger
 
-fun main(args: Array<String>) {
+fun main() {
     val line = readFile("src/main/resources/y2015/day25.txt")[0]
     val stopRow = matchNumbers(line)[0]; val stopColumn = matchNumbers(line)[1]
     var curValue = 20151125L

@@ -3,7 +3,7 @@ package adventofcode.y2021 // ktlint-disable filename
 import adventofcode.readFile
 import adventofcode.transpose
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2021/day03.txt").map { line -> line.map { it } }
     val transpose = transpose(lines)
     val minFunc = { l: List<Char> -> if (l.count{ it == '0' } <= l.count { it == '1' }) '0' else '1' }

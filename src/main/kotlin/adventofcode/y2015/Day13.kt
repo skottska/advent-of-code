@@ -6,7 +6,7 @@ import adventofcode.split
 val happinessMap = mutableMapOf<Pair<String, String>, Int>()
 var seatingPlans = mutableSetOf<Int>()
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2015/day13.txt")
     val people = mutableSetOf<String>()
     lines.forEach { line ->

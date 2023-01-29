@@ -3,7 +3,7 @@ package adventofcode.y2015 // ktlint-disable filename
 import adventofcode.matches
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2015/day02.txt")
     lines.fold(0) { total, line ->
         val (l, w, h) = dimension(line)

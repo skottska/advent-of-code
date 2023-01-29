@@ -6,7 +6,7 @@ import adventofcode.minOfNull
 import adventofcode.readFile
 import kotlin.math.max
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2015/day21.txt")
     val boss = (0..2).map { matches(lines[it], "[0-9]+").first().toInt() }.let { Fighter(it[0], it[1], it[2]) }
     println("part1=" + iterateFight { you, cost -> if (winFight(you, boss)) minOfNull(cost, you.cost) else cost })

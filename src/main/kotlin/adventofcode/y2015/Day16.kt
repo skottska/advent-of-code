@@ -4,7 +4,7 @@ import adventofcode.matches
 import adventofcode.readFile
 import adventofcode.split
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2015/day16.txt")
     val toFind = mutableMapOf(
         "children:" to eq(3), "cats:" to eq(7), "samoyeds:" to eq(2), "pomeranians:" to eq(3), "akitas:" to eq(0),

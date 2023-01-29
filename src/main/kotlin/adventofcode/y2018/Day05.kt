@@ -2,7 +2,7 @@ package adventofcode.y2018 // ktlint-disable filename
 
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val line = readFile("src/main/resources/y2018/day05.txt")[0].toList()
     println("part1=" + iterate(line))
     println("part2=" + ('a'..'z').minOf { iterate(line.filter { l -> l.lowercase().first() != it }) })

@@ -2,7 +2,7 @@ package adventofcode.y2022
 
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2022/day03.txt")
     println("part1=" + lines.sumOf { calculatePrio(it) })
     var total = 0

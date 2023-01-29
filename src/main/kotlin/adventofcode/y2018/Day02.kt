@@ -2,7 +2,7 @@ package adventofcode.y2018 // ktlint-disable filename
 
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2018/day02.txt")
     val exactlyTwo = lines.count { line -> line.groupBy { it }.any { it.value.size == 2 } }
     val exactlyThree = lines.count { line -> line.groupBy { it }.any { it.value.size == 3 } }

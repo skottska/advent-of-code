@@ -2,7 +2,7 @@ package adventofcode.y2015 // ktlint-disable filename
 
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val line = readFile("src/main/resources/y2015/day10.txt")[0]
     var result = java.lang.StringBuilder(line)
     repeat(40) { result = iterate(result) }

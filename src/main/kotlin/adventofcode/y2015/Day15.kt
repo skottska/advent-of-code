@@ -5,7 +5,7 @@ import adventofcode.readFile
 
 var cookieProps: List<CookieProp> = emptyList()
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2015/day15.txt")
     cookieProps = lines.map { line -> CookieProp(matches(line, "[-0-9]+").map { it.toInt() }) }
     println("part1=" + maxCookieScore(100))

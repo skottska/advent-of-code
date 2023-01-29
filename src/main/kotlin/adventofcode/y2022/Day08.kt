@@ -3,7 +3,7 @@ package adventofcode.y2022
 import adventofcode.readFile
 import adventofcode.transpose
 
-fun main(args: Array<String>) {
+fun main() {
     val grid = mutableListOf<List<Int>>()
     readFile("src/main/resources/y2022/day08.txt").forEach { line -> grid.add(line.asSequence().map { it.code - '0'.code }.toList()) }
     println("part1=" + (numVisible(grid, false) + numVisible(transpose(grid), true)).size)

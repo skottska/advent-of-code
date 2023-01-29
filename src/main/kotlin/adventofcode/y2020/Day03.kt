@@ -3,7 +3,7 @@ package adventofcode.y2020 // ktlint-disable filename
 import adventofcode.Coord
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     println("part1=" + slope(right = 3, down = 1))
     println("part2=" + listOf(1 to 1, 3 to 1, 5 to 1, 7 to 1, 1 to 2).map { slope(it.first, it.second) }.fold(1L) { total, i -> total * i })
 }

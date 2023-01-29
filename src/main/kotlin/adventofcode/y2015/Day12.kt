@@ -5,7 +5,7 @@ import adventofcode.readFile
 import org.json.JSONArray
 import org.json.JSONObject
 
-fun main(args: Array<String>) {
+fun main() {
     val line = readFile("src/main/resources/y2015/day12.txt")[0]
     println("part1=" + matches(line, "-?[0-9]+").sumOf { it.toInt() })
     println("part2=" + navigate(JSONObject("{ body: $line}")))

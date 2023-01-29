@@ -4,7 +4,7 @@ import adventofcode.matches
 import adventofcode.readFile
 import adventofcode.split
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2015/day06.txt")
     val square = 1000
     var result = 0

@@ -4,7 +4,7 @@ import adventofcode.matches
 import adventofcode.readFile
 import adventofcode.split
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2022/day11.txt")
     println("part1=" + monkeyBusiness(lines, 3, 20))
     println("part2=" + monkeyBusiness(lines, 1, 10000))

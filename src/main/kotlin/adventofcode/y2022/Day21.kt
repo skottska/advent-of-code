@@ -4,16 +4,16 @@ import adventofcode.readFile
 import adventofcode.split
 import java.lang.IllegalArgumentException
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2022/day21.txt").map { split(it) }
 
     var mapValues = lines.filter { it.size == 2 }.associate { it[0].substring(0, 4) to it[1].toLong() }.toMutableMap()
     val mapFormula = lines.filter { it.size != 2 }.associate { it[0].substring(0, 4) to it.subList(1, 4) }.toMutableMap()
-    println("part1="+ findRoot("root", mapValues, mapFormula))
+    println("part1=" + findRoot("root", mapValues, mapFormula))
 
     mapValues = lines.filter { it.size == 2 }.associate { it[0].substring(0, 4) to it[1].toLong() }.toMutableMap()
     mapFormula["root"] = mapFormula.getValue("root").let { listOf(it[0], "=", it[2]) }
-    println("part2="+ reverseFind("humn", "root", 0, mapValues, mapFormula))
+    println("part2=" + reverseFind("humn", "root", 0, mapValues, mapFormula))
 
 }
 

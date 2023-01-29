@@ -3,7 +3,7 @@ package adventofcode.y2022
 import adventofcode.readFile
 import adventofcode.split
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2022/day07.txt")
 
     var currentPos = JDirectory("/", null, mutableListOf())

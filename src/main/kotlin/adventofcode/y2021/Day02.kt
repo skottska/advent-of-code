@@ -3,7 +3,7 @@ package adventofcode.y2021 // ktlint-disable filename
 import adventofcode.matchNumbers
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2021/day02.txt")
     val func = { name: String -> lines.filter { it.contains(name) }.sumOf { matchNumbers(it).first() } }
     println("part1="+(func("forward") * (func("down") - func("up"))))

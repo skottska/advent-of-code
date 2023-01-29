@@ -3,7 +3,7 @@ package adventofcode.y2016 // ktlint-disable filename
 import adventofcode.md5
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val line = readFile("src/main/resources/y2016/day05.txt")[0]
     var i = 0
     var part1 = ""

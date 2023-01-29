@@ -7,7 +7,7 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2022/day15.txt")
     val row = 2000000L
     val maxSearch = 4000000L

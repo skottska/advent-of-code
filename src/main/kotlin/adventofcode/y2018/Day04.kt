@@ -5,7 +5,7 @@ import adventofcode.readFile
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2018/day04.txt").map {
         LocalDateTime.parse(it.substring(1, 17), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")) as LocalDateTime to it
     }.sortedBy { it.first }.map { it.second.substring(15, 17).toInt() to it.second.substring(18) }

@@ -6,7 +6,7 @@ import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2019/day03.txt")
     val start = Coord(0, 0)
     val wires = lines.map { it.split(',') }.map {

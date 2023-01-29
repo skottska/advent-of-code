@@ -5,7 +5,7 @@ import adventofcode.matchNumbers
 import adventofcode.readFile
 import kotlin.math.abs
 
-fun main(args: Array<String>) {
+fun main() {
     val line = readFile("src/main/resources/y2017/day03.txt")[0].let { matchNumbers(it).first() }
     var i = 1
     while (i * i < line) i += 2

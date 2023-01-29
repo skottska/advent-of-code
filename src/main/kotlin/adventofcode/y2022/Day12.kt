@@ -2,7 +2,7 @@ package adventofcode.y2022 // ktlint-disable filename
 
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2022/day12.txt").map { line -> line.map { it } }
     println("part1=" + findFewestSteps('S', lines))
     seen.clear()

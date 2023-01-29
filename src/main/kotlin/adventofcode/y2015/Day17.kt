@@ -4,7 +4,7 @@ import adventofcode.readFile
 
 var bucketList = mutableListOf<List<Int>>()
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2015/day17.txt")
     val buckets = lines.map { it.toInt() }
     println("part1=" + fillBucket(buckets, 150))

@@ -5,7 +5,7 @@ import adventofcode.matchNumbers
 import adventofcode.readFile
 import adventofcode.split
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2022/day14.txt")
     val stones = mutableSetOf<Pair<Int, Int>>()
 

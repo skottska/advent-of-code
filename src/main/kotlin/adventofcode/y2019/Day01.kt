@@ -2,7 +2,7 @@ package adventofcode.y2019 // ktlint-disable filename
 
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2019/day01.txt").map { it.toInt() }
     println("part1="+ lines.sumOf { it / 3 - 2 })
    println("part2="+ lines.sumOf { calculateFuel(it) })

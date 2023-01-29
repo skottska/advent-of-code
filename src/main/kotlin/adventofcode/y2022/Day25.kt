@@ -4,7 +4,7 @@ import adventofcode.readFile
 import java.math.BigInteger
 import java.math.BigInteger.*
 
-fun main(args: Array<String>) {
+fun main() {
     val total = readFile("src/main/resources/y2022/day25.txt").flatMap { line ->
         line.reversed().mapIndexed { index, c ->
             5.toBigInteger().pow(index) * fromSnafu(c).toBigInteger()

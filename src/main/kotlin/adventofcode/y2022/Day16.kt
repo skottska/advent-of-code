@@ -6,7 +6,7 @@ import adventofcode.readFile
 import adventofcode.split
 import kotlin.math.max
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2022/day16.txt")
     val valves = lines.associate { line ->
         val match = matches(line, "[A-Z][A-Z]")

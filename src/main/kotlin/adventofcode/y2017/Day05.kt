@@ -4,7 +4,7 @@ import adventofcode.matchNumbers
 import adventofcode.matches
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2017/day05.txt").map { matchNumbers(it).first() }
     println("part1="+ move(lines.toMutableList(), isPart2 = false))
     println("part2="+ move(lines.toMutableList(), isPart2 = true))

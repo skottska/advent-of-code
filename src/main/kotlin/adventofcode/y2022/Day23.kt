@@ -2,7 +2,7 @@ package adventofcode.y2022 // ktlint-disable filename
 
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2022/day23.txt")
     val initState = lines.map { line -> line.map { if (it == '.') State.EMPTY else State.ELF } }
     val field = (0..9).fold(initState) { init, i ->

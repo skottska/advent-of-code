@@ -7,7 +7,7 @@ import java.math.BigInteger
 import kotlin.math.max
 import kotlin.math.min
 
-fun main(args: Array<String>) {
+fun main() {
     val lines = readFile("src/main/resources/y2015/day23.txt")
     println("part1="+ runCommands(lines, 0))
     println("part2="+ runCommands(lines, 1))

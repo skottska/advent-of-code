@@ -2,7 +2,7 @@ package adventofcode.y2016 // ktlint-disable filename
 
 import adventofcode.readFile
 
-fun main(args: Array<String>) {
+fun main() {
     val func = { start: Pair<Int, Int>, digitMap: Map<Pair<Int, Int>, Char>, part: Int ->
         readFile("src/main/resources/y2016/day02.txt")
             .map { it.fold(start) { total, i -> move(total, i, digitMap) } }
