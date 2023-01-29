@@ -33,7 +33,7 @@ fun main() {
             funcIndex = if (funcIndex == 0) 3 else funcIndex - 1
         }
         val around = listOf(-1, 0, 1)
-        val total = around.sumOf { row -> around.sumOf { col -> map.getOrDefault(cur.copy(row = cur.row + row, col = cur.col + col), 0)} }
+        val total = around.sumOf { row -> around.sumOf { col -> map.getOrDefault(cur.copy(row = cur.row + row, col = cur.col + col), 0) } }
         if (total > line) { println("part2=$total"); return }
         map[cur] = total
     }

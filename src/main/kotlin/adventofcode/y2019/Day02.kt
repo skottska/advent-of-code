@@ -7,11 +7,13 @@ import java.lang.IllegalArgumentException
 fun main() {
     val line = matchNumbers(readFile("src/main/resources/y2019/day02.txt")[0])
     println("part1=" + runProgram(line.toMutableList(), 12, 2))
-    println("part2=" + (0..99).flatMap { noun ->
-        (0..99).mapNotNull { verb ->
-            if (runProgram(line.toMutableList(), noun, verb) == 19690720) 100 * noun + verb else null
-        }
-    }.first())
+    println(
+        "part2=" + (0..99).flatMap { noun ->
+            (0..99).mapNotNull { verb ->
+                if (runProgram(line.toMutableList(), noun, verb) == 19690720) 100 * noun + verb else null
+            }
+        }.first()
+    )
 }
 
 private fun runProgram(nums: MutableList<Int>, noun: Int, verb: Int): Int {

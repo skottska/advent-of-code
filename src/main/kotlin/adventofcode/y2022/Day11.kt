@@ -12,12 +12,12 @@ fun main() {
 
 private fun monkeyBusiness(lines: List<String>, divisor: Int, rounds: Int): Long {
     val monkeys = lines.windowed(7, 7, true).map { monkey ->
-            Monkey(
-                items = matches(monkey[1], "[0-9]+").map { it.toLong() },
-                operation = parseOperation(monkey[2]),
-                throwTo = parseThrowTo(monkey),
-                divisor = split(monkey[3])[3].toInt()
-            )
+        Monkey(
+            items = matches(monkey[1], "[0-9]+").map { it.toLong() },
+            operation = parseOperation(monkey[2]),
+            throwTo = parseThrowTo(monkey),
+            divisor = split(monkey[3])[3].toInt()
+        )
     }
 
     val lowestCommonDivisor = divisor * monkeys.map { it.divisor }.fold(1L) { total, i -> total * i }

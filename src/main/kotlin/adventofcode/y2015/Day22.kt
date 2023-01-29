@@ -11,9 +11,9 @@ fun main() {
     val spells = listOf(
         TurnsSpell(229, 5, { fight: Fight -> fight.increaseMana(101) }),
         TurnsSpell(113, 6, { fight: Fight -> fight.adjustArmour(7) }, { fight: Fight -> fight.adjustArmour(0) }),
-        DirectSpell(53) { fight: Fight -> fight.damageBoss(4)},
-        DirectSpell(73) { fight: Fight -> fight.drain(2)},
-        TurnsSpell(173, 6, { fight: Fight -> fight.damageBoss(3) }),
+        DirectSpell(53) { fight: Fight -> fight.damageBoss(4) },
+        DirectSpell(73) { fight: Fight -> fight.drain(2) },
+        TurnsSpell(173, 6, { fight: Fight -> fight.damageBoss(3) })
     )
     iterateFight(Fight(Wizard(50, 500), boss), spells, false)
     println("part1=$minMana")
@@ -54,13 +54,15 @@ private fun castSpell(fight: Fight, spell: Spell, spells: List<Spell>, isPart2: 
     }
 }
 
-private fun updateMana(fight: Fight) { if (fight.wonFight()) {
-    minMana = minMana?.let { min(it, fight.manaSpent) } ?: fight.manaSpent }
+private fun updateMana(fight: Fight) {
+    if (fight.wonFight()) {
+        minMana = minMana?.let { min(it, fight.manaSpent) } ?: fight.manaSpent
+    }
 }
 
-private sealed interface Spell {val mana: Int }
-private data class DirectSpell(override val mana: Int, val castSpell: (Fight) -> Fight): Spell
-private data class TurnsSpell(override val mana: Int, val turns: Int, val castSpell: (Fight) -> Fight, val end: (Fight) -> Fight = { fight: Fight -> fight}): Spell
+private sealed interface Spell { val mana: Int }
+private data class DirectSpell(override val mana: Int, val castSpell: (Fight) -> Fight) : Spell
+private data class TurnsSpell(override val mana: Int, val turns: Int, val castSpell: (Fight) -> Fight, val end: (Fight) -> Fight = { fight: Fight -> fight }) : Spell
 
 private data class Fight(val wizard: Wizard, val boss: Boss, val activeSpells: List<TurnsSpell> = listOf(), val manaSpent: Int = 0) {
     fun damageBoss(damage: Int) = copy(boss = boss.copy(hp = boss.hp - damage))
@@ -74,11 +76,12 @@ private data class Fight(val wizard: Wizard, val boss: Boss, val activeSpells: L
     }
 
     fun startTurn(isPlayer: Boolean = false): Fight {
-        val newActiveSpells = activeSpells.map { spell -> spell.copy(turns =  spell.turns - 1) }
+        val newActiveSpells = activeSpells.map { spell -> spell.copy(turns = spell.turns - 1) }
         return newActiveSpells.fold(copy(activeSpells = newActiveSpells)) {
-                result, spell -> if (spell.turns == 0) spell.castSpell(result).let { spell.end(it) } else spell.castSpell(result)
+                result, spell ->
+            if (spell.turns == 0) spell.castSpell(result).let { spell.end(it) } else spell.castSpell(result)
         }.let { it.copy(activeSpells = it.activeSpells.filter { a -> a.turns > 0 }) }
-            .let { if(isPlayer) it.copy(wizard = it.wizard.copy(hp = it.wizard.hp - 1)) else it }
+            .let { if (isPlayer) it.copy(wizard = it.wizard.copy(hp = it.wizard.hp - 1)) else it }
     }
 
     fun ongoing() = wizard.hp > 0 && boss.hp > 0
@@ -90,8 +93,6 @@ private data class Fight(val wizard: Wizard, val boss: Boss, val activeSpells: L
             is TurnsSpell -> canAfford && activeSpells.none { it.mana == spell.mana }
         }
     }
-
 }
 private data class Wizard(val hp: Int, val mana: Int, val armour: Int = 0)
 private data class Boss(val hp: Int, val damage: Int)
-

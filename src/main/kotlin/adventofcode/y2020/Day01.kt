@@ -4,8 +4,8 @@ import adventofcode.readFile
 
 fun main() {
     val lines = readFile("src/main/resources/y2020/day01.txt").map { it.toLong() }
-    println("part1="+ sumEquals(2020, 2, lines)?.let { it.first() * it.last() })
-    println("part2="+ sumEquals(2020, 3, lines)?.let { it[0] * it[1] * it[2] })
+    println("part1=" + sumEquals(2020, 2, lines)?.let { it.first() * it.last() })
+    println("part2=" + sumEquals(2020, 3, lines)?.let { it[0] * it[1] * it[2] })
 }
 
 private fun sumEquals(eq: Long, num: Int, lines: List<Long>): List<Long>? {

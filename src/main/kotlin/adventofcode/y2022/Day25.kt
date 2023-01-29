@@ -10,7 +10,7 @@ fun main() {
             5.toBigInteger().pow(index) * fromSnafu(c).toBigInteger()
         }
     }.sumOf { it }
-    print("part1="+toSnafu(total, maxPower(total)))
+    print("part1=" + toSnafu(total, maxPower(total)))
 }
 
 private fun maxPower(i: BigInteger): BigInteger {
@@ -22,7 +22,6 @@ private fun maxPower(i: BigInteger): BigInteger {
     }
     return cur
 }
-
 
 private fun maxSnafu(power: BigInteger): BigInteger = when {
     power < ONE -> ZERO

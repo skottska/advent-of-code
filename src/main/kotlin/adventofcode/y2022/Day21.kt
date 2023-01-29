@@ -14,7 +14,6 @@ fun main() {
     mapValues = lines.filter { it.size == 2 }.associate { it[0].substring(0, 4) to it[1].toLong() }.toMutableMap()
     mapFormula["root"] = mapFormula.getValue("root").let { listOf(it[0], "=", it[2]) }
     println("part2=" + reverseFind("humn", "root", 0, mapValues, mapFormula))
-
 }
 
 private fun containsName(toFind: String, from: String, mapFormula: Map<String, List<String>>): Boolean {
@@ -33,7 +32,7 @@ private fun reverseFind(find: String, from: String, curValue: Long, mapValues: M
     val unknownFirst = containsName(find, root1, mapFormula)
     val unknownName = if (unknownFirst) root1 else root2
     val knownValue = if (unknownFirst) findRoot(root2, mapValues, mapFormula) else findRoot(root1, mapValues, mapFormula)
-    val func = {x : Long -> reverseFind(find, unknownName, x, mapValues, mapFormula) }
+    val func = { x: Long -> reverseFind(find, unknownName, x, mapValues, mapFormula) }
     return when {
         formula[1] == "-" && unknownFirst -> func(curValue + knownValue)
         formula[1] == "-" && !unknownFirst -> func((curValue - knownValue) * -1)
@@ -56,6 +55,6 @@ private fun findRoot(find: String, mapValues: MutableMap<String, Long>, mapFormu
         "+" -> x + y
         "*" -> x * y
         "/" -> x / y
-        else -> throw IllegalArgumentException("what is "+formula[1])
+        else -> throw IllegalArgumentException("what is " + formula[1])
     }.also { mapValues[find] = it }
 }

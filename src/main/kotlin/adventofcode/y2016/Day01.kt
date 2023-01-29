@@ -12,7 +12,7 @@ fun main() {
     var firstDuplicate: Pair<Int, Int>? = null
     matches(readFile("src/main/resources/y2016/day01.txt")[0], "[L|R][0-9]+").forEach {
         if (it[0] == 'R') { if (++curFacing == facing.size) curFacing = 0 }
-        else if (--curFacing == -1) curFacing = facing.size - 1
+        else { if (--curFacing == -1) curFacing = facing.size - 1 }
 
         val amount = it.substring(1).toInt()
         (1..amount).forEach { _ ->

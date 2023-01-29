@@ -9,7 +9,7 @@ fun main() {
     println(arrangePackagesQuad(packages))
 }
 
-private fun arrangePackagesQuad(packages: List<Int>): Long?{
+private fun arrangePackagesQuad(packages: List<Int>): Long? {
     val target = packages.sum() / 4
     (1..packages.size / 4).forEach { size ->
         val arrangements = arrangeCompartment(target, size, packages.reversed())
@@ -20,7 +20,7 @@ private fun arrangePackagesQuad(packages: List<Int>): Long?{
     return null
 }
 
-private fun arrangePackagesTriple(packages: List<Int>): Long?{
+private fun arrangePackagesTriple(packages: List<Int>): Long? {
     val target = packages.sum() / 3
     (1..packages.size / 3).forEach { size ->
         val arrangements = arrangeCompartment(target, size, packages.reversed())
@@ -33,15 +33,15 @@ private fun arrangePackagesTriple(packages: List<Int>): Long?{
 
 private fun canArrangeInTwoComps(target: Int, packages: List<Int>, minGroup: Int): Boolean {
     (minGroup..(packages.size / 2)).forEach { size ->
-            if (arrangeBothCompartment(target, size, packages.reversed())) return true
+        if (arrangeBothCompartment(target, size, packages.reversed())) return true
     }
     return false
 }
 
 private fun arrangeBothCompartment(target: Int, size: Int, packages: List<Int>): Boolean {
     packages.forEach { p ->
-        if (p == target && size == 1 ) return true
-        if (p < target && size > 1)  if (arrangeBothCompartment(target - p, size - 1, packages.filter { it < p })) return true
+        if (p == target && size == 1) return true
+        if (p < target && size > 1) if (arrangeBothCompartment(target - p, size - 1, packages.filter { it < p })) return true
     }
     return false
 }

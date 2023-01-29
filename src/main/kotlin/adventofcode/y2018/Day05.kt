@@ -21,4 +21,3 @@ private fun iterate(cs: List<Char>): Int {
 private fun removePairs(cs: List<Char>) = cs.chunked(2).mapNotNull {
     if (it.size == 2 && it.first() != it.last() && it.first().lowercase() == it.last().lowercase()) null else it
 }.flatten()
-
