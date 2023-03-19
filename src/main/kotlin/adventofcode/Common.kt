@@ -49,4 +49,4 @@ inline fun <T> Iterable<T>.firstIndexed(predicate: (index: Int, T) -> Boolean): 
     throw NoSuchElementException("Collection contains no element matching the predicate.")
 }
 
-fun List<Char>.string() = fold("") { total, i -> total + i }
+fun List<Char>.asString() = fold("") { total, i -> total + i }
