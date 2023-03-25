@@ -3,6 +3,7 @@ package adventofcode
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
+import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
 
@@ -38,7 +39,9 @@ fun minOfNull(x: Int?, y: Int?) = when {
 fun anyRange(a: Int, b: Int) = min(a, b)..(max(a, b))
 fun anyRange(a: Long, b: Long) = min(a, b)..(max(a, b))
 fun anyRange(a: List<Int>) = a.min()..a.max()
-data class Coord(val row: Int, val col: Int)
+data class Coord(val row: Int, val col: Int) {
+    fun distance(b: Coord) = abs(row - b.row) + abs(col - b.col)
+}
 
 fun <T> transpose(l: List<List<T>>) = (0 until l.first().size).map { colIndex -> l.map { it[colIndex] } }
 
