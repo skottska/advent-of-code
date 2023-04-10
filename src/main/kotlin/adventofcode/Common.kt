@@ -53,3 +53,21 @@ inline fun <T> Iterable<T>.firstIndexed(predicate: (index: Int, T) -> Boolean): 
 }
 
 fun List<Char>.asString() = fold("") { total, i -> total + i }
+
+class LinkedNode<T>(val value: T) {
+    var prev: LinkedNode<T> = this
+    var next: LinkedNode<T> = this
+
+    fun forward(places: Int) = (1..places).fold(this) { total, _ -> total.next }
+    fun back(places: Int) = (1..places).fold(this) { total, _ -> total.prev }
+    fun addAfter(toAdd: LinkedNode<T>) {
+        next.prev = toAdd
+        toAdd.next = next
+        toAdd.prev = this
+        next = toAdd
+    }
+    fun remove() {
+        prev.next = next
+        next.prev = prev
+    }
+}
