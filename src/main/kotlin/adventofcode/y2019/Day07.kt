@@ -9,12 +9,16 @@ fun main() {
         it.fold(0) { total, phase -> runProgram(line.toMutableList(), phase, total).output }
     }
     println("part1=$part1")
-    val part2 = listOf(listOf(9,7,8,5,6)).maxOf {
-        var input = ProgramOutput(false, 0)
+    val part2 = generatePhases(5..9).maxOf { phases ->
+        var input = ProgramOutput(false, 0, 0)
+        val programContexts = phases.associateWith { Pair(line.toMutableList(), 0) }.toMutableMap()
+        var firstIter = true
         while (!input.isHalted) {
-            input = it.fold(input) { total, phase -> runProgram(line.toMutableList(), phase, total.output) }
-            println(input)
-            Thread.sleep(1000)
+            input = phases.fold(input) { total, phase ->
+                val context = programContexts.getValue(phase)
+                runProgram(context.first, phase, total.output, context.second, firstIter).also { programContexts[phase] = context.first to it.index }
+            }
+            firstIter = false
         }
         input.output
     }
@@ -27,9 +31,9 @@ private fun generatePhases(range: IntRange, prefix: List<Int> = emptyList()): Li
         if (next.size == 5) listOf(next) else generatePhases(range, next)
     }.flatten()
 
-private fun runProgram(nums: MutableList<Int>, phase: Int, initialInput: Int): ProgramOutput {
-    val input = mutableListOf(phase, initialInput)
-    var index = 0
+private fun runProgram(nums: MutableList<Int>, phase: Int, initialInput: Int, curIndex: Int = 0, firstIter: Boolean = true): ProgramOutput {
+    val input = if (firstIter) mutableListOf(phase, initialInput) else mutableListOf(initialInput)
+    var index = curIndex
     while (nums[index] != 99) {
         when (nums[index].toString().last()) {
             '1' -> index = opcodeModify(nums, index, Int::plus)
@@ -38,7 +42,7 @@ private fun runProgram(nums: MutableList<Int>, phase: Int, initialInput: Int): P
             '4' -> {
                 val result = posOrImm(nums, index + 1, if (nums[index] == 4) '0' else '1')
                 if (phase in (5..9)) {
-                    return ProgramOutput(false, result)
+                    return ProgramOutput(false, result, index + 2)
                 } else { input.add(result); index += 2 }
             }
             '5' -> index = opcodeJump(nums, index) { a: Int -> a == 0 }
@@ -48,17 +52,15 @@ private fun runProgram(nums: MutableList<Int>, phase: Int, initialInput: Int): P
             else -> throw IllegalArgumentException("Don't know what to do with " + nums[index])
         }
     }
-    if (input.size != 1) throw IllegalArgumentException("Don't know what to do with " + input)
-    return ProgramOutput(true, input.first()).also { println("HALTED") }
+    return ProgramOutput(true, input.first(), index)
 }
 
-private data class ProgramOutput(val isHalted: Boolean, val output: Int)
+private data class ProgramOutput(val isHalted: Boolean, val output: Int, val index: Int)
 
 private fun posOrImm(nums: MutableList<Int>, i: Int, c: Char) = when (c) { '0' -> nums[nums[i]] else -> nums[i] }
 private fun opcode(i: Int) = i.toString().let { (it.length..3).fold(it) { total, _ -> "0$total" } }
 
 private fun opcodeModifySimple(nums: MutableList<Int>, index: Int, input: Int): Int {
-    if (nums[index].toString().length > 1) throw IllegalArgumentException("what am i: " + nums[index])
     nums[nums[index + 1]] = input
     return index + 2
 }
