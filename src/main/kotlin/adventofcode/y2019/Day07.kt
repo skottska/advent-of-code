@@ -10,7 +10,7 @@ fun main() {
     }
     println("part1=$part1")
     val part2 = generatePhases(5..9).maxOf { phases ->
-        var input = ProgramOutput(false, 0, 0)
+        var input = ProgramOutputDay07(false, 0, 0)
         val programContexts = phases.associateWith { Pair(line.toMutableList(), 0) }.toMutableMap()
         var firstIter = true
         while (!input.isHalted) {
@@ -31,7 +31,7 @@ private fun generatePhases(range: IntRange, prefix: List<Int> = emptyList()): Li
         if (next.size == 5) listOf(next) else generatePhases(range, next)
     }.flatten()
 
-private fun runProgram(nums: MutableList<Int>, phase: Int, initialInput: Int, curIndex: Int = 0, firstIter: Boolean = true): ProgramOutput {
+private fun runProgram(nums: MutableList<Int>, phase: Int, initialInput: Int, curIndex: Int = 0, firstIter: Boolean = true): ProgramOutputDay07 {
     val input = if (firstIter) mutableListOf(phase, initialInput) else mutableListOf(initialInput)
     var index = curIndex
     while (nums[index] != 99) {
@@ -42,7 +42,7 @@ private fun runProgram(nums: MutableList<Int>, phase: Int, initialInput: Int, cu
             '4' -> {
                 val result = posOrImm(nums, index + 1, if (nums[index] == 4) '0' else '1')
                 if (phase in (5..9)) {
-                    return ProgramOutput(false, result, index + 2)
+                    return ProgramOutputDay07(false, result, index + 2)
                 } else { input.add(result); index += 2 }
             }
             '5' -> index = opcodeJump(nums, index) { a: Int -> a == 0 }
@@ -52,10 +52,10 @@ private fun runProgram(nums: MutableList<Int>, phase: Int, initialInput: Int, cu
             else -> throw IllegalArgumentException("Don't know what to do with " + nums[index])
         }
     }
-    return ProgramOutput(true, input.first(), index)
+    return ProgramOutputDay07(true, input.first(), index)
 }
 
-private data class ProgramOutput(val isHalted: Boolean, val output: Int, val index: Int)
+private data class ProgramOutputDay07(val isHalted: Boolean, val output: Int, val index: Int)
 
 private fun posOrImm(nums: MutableList<Int>, i: Int, c: Char) = when (c) { '0' -> nums[nums[i]] else -> nums[i] }
 private fun opcode(i: Int) = i.toString().let { (it.length..3).fold(it) { total, _ -> "0$total" } }

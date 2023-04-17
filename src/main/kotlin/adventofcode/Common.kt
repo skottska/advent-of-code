@@ -16,9 +16,12 @@ fun matches(line: String, regex: String) = Regex(regex)
     .map { it.groupValues[0] }
     .toList()
 
-fun matchNumbers(line: String) = matches(line, "-?[0-9]+").map { it.toInt() }
+private const val NUMBER_REGEX = "-?[0-9]+"
+
+fun matchNumbers(line: String) = matches(line, NUMBER_REGEX).map { it.toInt() }
+fun matchNumbersToBigInt(line: String) = matches(line, NUMBER_REGEX).map { it.toBigInteger() }
 fun matchPositiveNumbers(line: String) = matches(line, "[0-9]+").map { it.toInt() }
-fun matchNumbersLong(line: String) = matches(line, "-?[0-9]+").map { it.toLong() }
+fun matchNumbersLong(line: String) = matches(line, NUMBER_REGEX).map { it.toLong() }
 
 fun md5(input: String) = BigInteger(1, MessageDigest.getInstance("MD5").digest(input.toByteArray()))
     .toString(16)
@@ -41,6 +44,16 @@ fun anyRange(a: Long, b: Long) = min(a, b)..(max(a, b))
 fun anyRange(a: List<Int>) = a.min()..a.max()
 data class Coord(val row: Int, val col: Int) {
     fun distance(b: Coord) = abs(row - b.row) + abs(col - b.col)
+}
+fun printCoords(cs: Collection<Coord>, printFunc: (c: Coord) -> String) {
+    val rows = cs.map { it.row }
+    val cols = cs.map { it.col }
+    for (row in rows.min()..rows.max()) {
+        for (col in cols.min()..cols.max()) {
+            print(printFunc(Coord(row, col)))
+        }
+        println()
+    }
 }
 
 fun <T> transpose(l: List<List<T>>) = (0 until l.first().size).map { colIndex -> l.map { it[colIndex] } }
