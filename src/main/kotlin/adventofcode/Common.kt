@@ -84,3 +84,13 @@ class LinkedNode<T>(val value: T) {
         next.prev = prev
     }
 }
+
+data class Coord3D(val x: Int, val y: Int, val z: Int) {
+    fun isAdjacent(c: Coord3D) =
+        when {
+            listOf(x == c.x, y == c.y, z == c.z).filter { it }.size != 2 -> false
+            else -> abs((x + y + z) - (c.x + c.y + c.z)) == 1
+        }
+
+    fun absSumOfCoords() = abs(x) + abs(y) + abs(z)
+}

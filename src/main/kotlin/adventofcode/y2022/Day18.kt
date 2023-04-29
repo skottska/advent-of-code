@@ -1,5 +1,6 @@
 package adventofcode.y2022 // ktlint-disable filename
 
+import adventofcode.Coord3D
 import adventofcode.matchNumbers
 import adventofcode.readFile
 import kotlin.math.abs
@@ -58,11 +59,3 @@ private fun groupBubblesInner(bubble: Coord3D, bubbleGroup: Set<Coord3D>, rest: 
 }
 
 private fun freeSides(c: Coord3D, cs: List<Coord3D>) = cs.fold(6) { total, it -> total - if (c.isAdjacent(it)) 1 else 0 }
-
-private data class Coord3D(val x: Int, val y: Int, val z: Int) {
-    fun isAdjacent(c: Coord3D) =
-        when {
-            listOf(x == c.x, y == c.y, z == c.z).filter { it }.size != 2 -> false
-            else -> abs((x + y + z) - (c.x + c.y + c.z)) == 1
-        }
-}
