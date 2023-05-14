@@ -1,6 +1,8 @@
 package adventofcode.y2019 // ktlint-disable filename
 
 import adventofcode.Coord
+import adventofcode.DirectedCoord
+import adventofcode.Facing
 import adventofcode.matchNumbersToBigInt
 import adventofcode.printCoords
 import adventofcode.readFile
@@ -15,43 +17,21 @@ fun main() {
 }
 
 private fun paintPanels(line: List<BigInteger>, initialPanelColour: Int): Map<Coord, Int> {
-    var curCoord = Coord(0, 0)
-    var facing = Facing.UP
-    val panels = mutableMapOf(curCoord to initialPanelColour)
+    var directedCoord = DirectedCoord(facing = Facing.UP, coord = Coord(0, 0))
+    val panels = mutableMapOf(directedCoord.coord to initialPanelColour)
     val nums = line.toMutableList()
     var programContext = ProgramContext()
     while (true) {
-        val curColour = panels.getOrDefault(curCoord, 0)
+        val curColour = panels.getOrDefault(directedCoord.coord, 0)
         programContext = runIntCodeProgram(nums, curColour.toBigInteger(), programContext)
         if (programContext.isHalted) break
-        panels[curCoord] = programContext.output?.toInt() ?: throw IllegalArgumentException("Output was null")
+        panels[directedCoord.coord] = programContext.output?.toInt() ?: throw IllegalArgumentException("Output was null")
         programContext = runIntCodeProgram(nums, emptyList(), programContext)
-        facing = when (programContext.output?.toInt()) {
-            0 -> facing.left()
-            1 -> facing.right()
+        directedCoord = when (programContext.output?.toInt()) {
+            0 -> directedCoord.left()
+            1 -> directedCoord.right()
             else -> throw IllegalArgumentException("Output was null")
-        }
-        curCoord = facing.move(curCoord)
+        }.forward()
     }
     return panels
-}
-
-private enum class Facing(val move: Coord) {
-    UP(Coord(-1, 0)), RIGHT(Coord(0, 1)), DOWN(Coord(1, 0)), LEFT(Coord(0, -1));
-
-    fun left() = when (this) {
-        UP -> LEFT
-        RIGHT -> UP
-        DOWN -> RIGHT
-        LEFT -> DOWN
-    }
-
-    fun right() = when (this) {
-        UP -> RIGHT
-        RIGHT -> DOWN
-        DOWN -> LEFT
-        LEFT -> UP
-    }
-
-    fun move(c: Coord) = Coord(c.row + move.row, c.col + move.col)
 }

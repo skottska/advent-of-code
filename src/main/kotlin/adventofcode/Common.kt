@@ -45,6 +45,32 @@ fun anyRange(a: List<Int>) = a.min()..a.max()
 data class Coord(val row: Int, val col: Int) {
     fun distance(b: Coord) = abs(row - b.row) + abs(col - b.col)
 }
+data class DirectedCoord(val facing: Facing, val coord: Coord) {
+    fun left() = copy(facing = facing.left())
+    fun right() = copy(facing = facing.right())
+    fun forward() = copy(coord = facing.move(coord))
+}
+
+enum class Facing(val move: Coord) {
+    UP(Coord(-1, 0)), RIGHT(Coord(0, 1)), DOWN(Coord(1, 0)), LEFT(Coord(0, -1));
+
+    fun left() = when (this) {
+        UP -> LEFT
+        RIGHT -> UP
+        DOWN -> RIGHT
+        LEFT -> DOWN
+    }
+
+    fun right() = when (this) {
+        UP -> RIGHT
+        RIGHT -> DOWN
+        DOWN -> LEFT
+        LEFT -> UP
+    }
+
+    fun move(c: Coord) = Coord(c.row + move.row, c.col + move.col)
+}
+
 fun printCoords(cs: Collection<Coord>, printFunc: (c: Coord) -> String) {
     val rows = cs.map { it.row }
     val cols = cs.map { it.col }
