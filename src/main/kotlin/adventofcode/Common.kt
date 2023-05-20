@@ -44,6 +44,12 @@ fun anyRange(a: Long, b: Long) = min(a, b)..(max(a, b))
 fun anyRange(a: List<Int>) = a.min()..a.max()
 data class Coord(val row: Int, val col: Int) {
     fun distance(b: Coord) = abs(row - b.row) + abs(col - b.col)
+    fun around() = listOf(
+        copy(col = col - 1),
+        copy(col = col + 1),
+        copy(row = row - 1),
+        copy(row = row + 1)
+    )
 }
 data class DirectedCoord(val facing: Facing, val coord: Coord) {
     fun left() = copy(facing = facing.left())
