@@ -50,6 +50,12 @@ data class Coord(val row: Int, val col: Int) {
         copy(row = row - 1),
         copy(row = row + 1)
     )
+    fun aroundDiag() = around() + listOf(
+        Coord(row + 1, col - 1),
+        Coord(row + 1, col + 1),
+        Coord(row - 1, col - 1),
+        Coord(row - 1, col + 1)
+    )
 }
 data class DirectedCoord(val facing: Facing, val coord: Coord) {
     fun left() = copy(facing = facing.left())
