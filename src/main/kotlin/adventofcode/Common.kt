@@ -44,6 +44,10 @@ fun anyRange(a: Long, b: Long) = min(a, b)..(max(a, b))
 fun anyRange(a: List<Int>) = a.min()..a.max()
 data class Coord(val row: Int, val col: Int) {
     fun distance(b: Coord) = abs(row - b.row) + abs(col - b.col)
+    fun right() = copy(col = col + 1)
+    fun left() = copy(col = col - 1)
+    fun down() = copy(row = row + 1)
+    fun up() = copy(row = row - 1)
     fun around() = listOf(
         copy(col = col - 1),
         copy(col = col + 1),
@@ -104,6 +108,7 @@ inline fun <T> Iterable<T>.firstIndexed(predicate: (index: Int, T) -> Boolean): 
 }
 
 fun List<Char>.asString() = fold("") { total, i -> total + i }
+fun String.sort() = String(toCharArray().apply { sort() })
 
 class LinkedNode<T>(val value: T) {
     var prev: LinkedNode<T> = this
