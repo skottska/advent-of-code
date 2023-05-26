@@ -1,61 +1,91 @@
 package adventofcode.y2019 // ktlint-disable filename
 
-import adventofcode.matchNumbers
-import adventofcode.matchNumbersLong
+import adventofcode.matchNumbersToBigInt
 import adventofcode.readFile
-import java.math.BigDecimal
+import java.math.BigInteger
 
 fun main() {
     val lines = readFile("src/main/resources/y2019/day22.txt")
-    println("part1=" + rememberCardPosition(lines, startPos = 2019L, totalCards = 10007L))
-    println("part2=" + part2(lines))
-    val x: (Long) -> Long
+    println("part1=" + rememberCardPosition(convertShuffle(lines), startPos = 2019L.toBigInteger(), totalCards = 10007L.toBigInteger()))
+
+    val totalCards = 119315717514047L.toBigInteger()
+    val iterations = totalCards - 101741582076661L.toBigInteger() - BigInteger.ONE
+    val generatedShuffles = generateShuffles(convertShuffle(lines), iterations, totalCards)
+    println("part2=" + rememberCardPosition(generatedShuffles, startPos = 2020L.toBigInteger(), totalCards = totalCards))
 }
 
-private fun part2(lines: List<String>): Long {
-    //val seen = mutableSetOf<Long>()
-    val remember = rememberCardPosition2(lines, totalCards = 119315717514047L)
-    var pos = remember.fold(2020L) { total, func -> func(total) }
-    var counter = 1
-
-    while (pos != 2020L) {
-        //seen.add(pos)
-        pos = remember.fold(pos) { total, func -> func(total) }.also { println("pos="+pos+" become="+it+ " diff="+(pos-it)) }
-        counter++
-        //if (seen.size % 100_000 == 0) println("size=" + seen.size + " " + (100 * seen.size).toBigDecimal().div(BigDecimal(101741582076661L)))
-        if (counter % 100_000 == 0) println("size=" + counter + " " + (100 * counter).toBigDecimal().div(BigDecimal(101741582076661L)))
+private fun compressShuffles(inShuffles: List<Shuffle>, totalCards: BigInteger): List<Shuffle> {
+    var shuffles = inShuffles
+    var newShuffles = reorderShuffles(shuffles, totalCards)
+    while (shuffles != newShuffles) {
+        shuffles = newShuffles
+        newShuffles = reorderShuffles(shuffles, totalCards)
     }
-    println("Dupe at " + counter + " val=" + pos)
-    return 0L
+    return shuffles
 }
 
-private fun rememberCardPosition(lines: List<String>, startPos: Long, totalCards: Long): Long =
-    lines.fold(startPos) { pos, line ->
-        when {
-            line == "deal into new stack" -> totalCards - pos - 1
-            line.startsWith("cut") -> {
-                val cut = matchNumbersLong(line).first().let { if (it < 0) totalCards + it else it }
-                if (cut > pos) {
-                    totalCards - cut + pos
-                } else {
-                    pos - cut
-                }
-            }
-            else -> {
-                val increment = matchNumbers(line).first()
-                pos * increment % totalCards
-            }
+private fun generateShuffles(baseShuffles: List<Shuffle>, iterations: BigInteger, totalCards: BigInteger): List<Shuffle> {
+    var num = BigInteger.ONE
+    var curShuffles = baseShuffles
+    val map = mutableMapOf(num to baseShuffles)
+    while (num < iterations) {
+        num *= BigInteger.TWO
+        curShuffles = compressShuffles(curShuffles + curShuffles, totalCards)
+        map[num] = curShuffles
+    }
+
+    val keys = map.keys.sorted()
+    var iterationsLeft = iterations
+    var result = emptyList<Shuffle>()
+    while (iterationsLeft > BigInteger.ZERO) {
+        val highestUnder = keys.last { it <= iterationsLeft }
+        result = compressShuffles(result + map.getValue(highestUnder), totalCards)
+        iterationsLeft -= highestUnder
+    }
+    return result
+}
+
+private fun rememberCardPosition(shuffles: List<Shuffle>, startPos: BigInteger, totalCards: BigInteger): BigInteger =
+    shuffles.fold(startPos) { pos, shuffle ->
+        when (shuffle) {
+            is DealNewStack -> totalCards - pos - BigInteger.ONE
+            is Cut -> (pos - shuffle.cut) % totalCards
+            is DealIncrement -> (pos * shuffle.increment) % totalCards
         }
     }
 
-private fun rememberCardPosition2(lines: List<String>, totalCards: Long): List<(Long) -> Long> =
-    lines.fold(emptyList()) { total, line ->
+private fun convertShuffle(lines: List<String>) = lines.map { line ->
+    when {
+        line == "deal into new stack" -> DealNewStack
+        line.startsWith("cut") -> Cut(matchNumbersToBigInt(line).first())
+        else -> DealIncrement(matchNumbersToBigInt(line).first())
+    }
+}
+
+private fun reorderShuffles(lines: List<Shuffle>, totalCards: BigInteger): List<Shuffle> {
+    val firstPass = reorderShufflesInternal(lines, totalCards)
+    return listOf(firstPass.first()) + reorderShufflesInternal(firstPass.drop(1), totalCards)
+}
+
+private fun reorderShufflesInternal(lines: List<Shuffle>, totalCards: BigInteger) = lines.windowed(size = 2, step = 2, partialWindows = true).flatMap { window ->
+    if (window.size == 1) {
+        window
+    } else {
+        val first = window.first()
+        val last = window.last()
         when {
-            line == "deal into new stack" -> total + { pos: Long -> totalCards - pos - 1 }
-            line.startsWith("cut") -> {
-                val cut = matchNumbersLong(line).first().let { if (it < 0) totalCards + it else it }
-                total + { pos: Long -> if (cut > pos) totalCards - cut + pos else pos - cut }
-            }
-            else -> total + { pos: Long -> pos * matchNumbersLong(line).first() % totalCards }
+            first is DealNewStack && last is DealNewStack -> emptyList()
+            first is Cut && last is Cut -> listOf(Cut((first.cut + last.cut) % totalCards))
+            first is DealIncrement && last is DealIncrement -> listOf(DealIncrement((first.increment * last.increment) % totalCards))
+            first is DealNewStack && last is Cut -> listOf(Cut((totalCards - last.cut) % totalCards), first)
+            first is Cut && last is DealIncrement -> listOf(last, Cut((first.cut * last.increment) % totalCards))
+            first is DealNewStack && last is DealIncrement -> listOf(last, Cut((-last.increment + BigInteger.ONE) % totalCards), first)
+            else -> window
         }
     }
+}
+
+private sealed interface Shuffle
+private object DealNewStack : Shuffle
+private data class DealIncrement(val increment: BigInteger) : Shuffle
+private data class Cut(val cut: BigInteger) : Shuffle
