@@ -3,74 +3,50 @@ package adventofcode.y2019 // ktlint-disable filename
 import adventofcode.matchNumbersToBigInt
 import adventofcode.readFile
 import java.math.BigInteger
+import kotlin.concurrent.thread
+import kotlin.system.exitProcess
 
 fun main() {
     val line = matchNumbersToBigInt(readFile("src/main/resources/y2019/day23.txt")[0])
+    val nics = 0..49
+    val buffers = nics.associateWith { mutableListOf(it.toBigInteger()) } + mapOf(255 to mutableListOf())
 
-    val firstNic = Nic(ProgramContext(), line.toMutableList(), 0)
-    val nics = mutableMapOf(firstNic.id to firstNic)
-    var packet = runNic(firstNic, emptyList(), isStart = true)
-
-    while (true) {
-        val receiver = nics[packet.receiver]
-        packet = if (receiver != null) {
-            runNic(receiver, listOf(packet.x, packet.y))
-        } else {
-            val newReceiver = Nic(ProgramContext(), line.toMutableList(), packet.receiver)
-            runNic(newReceiver, listOf(packet.x, packet.y), isStart = true)
+    thread {
+        var part1Complete = false
+        val deliveredYs = mutableListOf<BigInteger>()
+        while (true) {
+            Thread.sleep(100)
+            val buffer = buffers.getValue(255)
+            if (buffer.isNotEmpty() && !part1Complete) {
+                part1Complete = true
+                println("part1=" + buffer[1])
+            }
+            val allBuffersEmpty = buffers.filter { it.key in nics }.all { it.value.isEmpty() }
+            if (allBuffersEmpty && buffer.isNotEmpty()) {
+                if (deliveredYs.isNotEmpty() && deliveredYs.last() == buffer.last()) {
+                    println("part2=" + buffer.last())
+                    exitProcess(0)
+                }
+                deliveredYs.add(buffer.last())
+                buffers.getValue(0).addAll(buffer.takeLast(2))
+            }
         }
     }
-}
-private fun runNic(nic: Nic, input: List<Int>, isStart: Boolean = false): Packet {
-    val programInputs = when {
-        isStart && input.isEmpty() -> listOf(
-            listOf(nic.id, -1),
-            listOf(-1),
-            listOf(-1),
-        )
-        isStart -> listOf(
-            listOf(nic.id, input.first(), input.last(), -1, -1, -1, -1),
-            listOf(-1),
-            listOf(-1),
-        )
-        input.isEmpty() -> listOf(
-            listOf(-1),
-            listOf(-1),
-            listOf(-1),
-        )
-        else -> listOf(
-            listOf(input.first()),
-            listOf(input.last()),
-            listOf(-1),
-        )
-    }
-    println("Handling " + nic.id + " will send " + programInputs)
-    nic.programContext = runIntCodeProgram(nic.program, programInputs[0].map { it.toBigInteger() }, nic.programContext)
-    val receiver = nic.programContext.output?.toInt()?.also { println("RECEIVER=$it") }
-    nic.programContext = runIntCodeProgram(nic.program, programInputs[1].map { it.toBigInteger() }, nic.programContext)
-    val x = nic.programContext.output
-    nic.programContext = runIntCodeProgram(nic.program, programInputs[2].map { it.toBigInteger() }, nic.programContext)
-    val y = nic.programContext.output
-    if (receiver == null || x == null || y == null) throw IllegalArgumentException("Something is null receiver=$receiver x=$x y=$y")
-    return Packet(receiver, x.toInt(), y.toInt())
-}
-private data class Nic(var programContext: ProgramContext, val program: MutableList<BigInteger>, val id: Int)
-private data class Packet(val receiver: Int, val x: Int, val y: Int)
 
-private fun springScript(line: List<BigInteger>, instructions: List<String>, whichPart: Int) {
-    val program = line.toMutableList()
-    var context = ProgramContext()
-    while (!context.isHalted && context.output?.toInt()?.toChar() != '\n') {
-        context = runIntCodeProgram(program, emptyList(), context)
-        // print(context.output?.toInt()?.toChar())
-    }
-    context = runIntCodeProgram(program, instructions.fold("") { total, i -> total + i + '\n' }.map { it.code.toBigInteger() }, context)
-    while (!context.isHalted) {
-        context = runIntCodeProgram(program, emptyList(), context)
-        val res = context.output?.toInt()
-        if (res != null && res > 128) println("part$whichPart=$res")
-        /*else {
-            res?.let { print(it.toChar()) }
-        }*/
+    nics.map { nicId ->
+        thread {
+            var programContext = ProgramContext()
+            val program = line.toMutableList()
+            while (true) {
+                programContext = runIntCodeProgramMutable(program, buffers.getValue(nicId), programContext)
+                val receiver = programContext.output?.toInt()
+                programContext = runIntCodeProgramMutable(program, buffers.getValue(nicId), programContext)
+                val x = programContext.output
+                programContext = runIntCodeProgramMutable(program, buffers.getValue(nicId), programContext)
+                val y = programContext.output
+                if (receiver == null || x == null || y == null) throw IllegalArgumentException("Something is null receiver=$receiver x=$x y=$y")
+                buffers.getValue(receiver).addAll(listOf(x, y))
+            }
+        }
     }
 }
