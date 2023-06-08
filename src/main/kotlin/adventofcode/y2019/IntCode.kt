@@ -13,7 +13,10 @@ fun runIntCodeProgram(nums: MutableList<BigInteger>, initialInput: List<BigInteg
         when (nums[index].toString().last()) {
             '1' -> index = opcodeModify(nums, index, relativeBase, BigInteger::plus)
             '2' -> index = opcodeModify(nums, index, relativeBase) { a: BigInteger, b: BigInteger -> a * b }
-            '3' -> index = opcodeModifySimple(nums, index, input.removeAt(0), relativeBase)
+            '3' -> {
+                println("Removing "+input.firstOrNull() )
+                index = opcodeModifySimple(nums, index, input.removeAt(0), relativeBase)
+            }
             '4' -> { output.add(param(1)); index += 2; return ProgramContext(isHalted = false, output.firstOrNull(), index, relativeBase) }
             '5' -> index = opcodeJump(nums, index, relativeBase) { a: BigInteger -> a == BigInteger.ZERO }
             '6' -> index = opcodeJump(nums, index, relativeBase) { a: BigInteger -> a != BigInteger.ZERO }
