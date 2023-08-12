@@ -13,7 +13,7 @@ fun main() {
         "NOT A J",
         "OR T J",
         "AND D J",
-        "WALK",
+        "WALK"
     )
     springScript(line, instructions1, whichPart = 1)
 
@@ -28,10 +28,9 @@ fun main() {
         "NOT T T",
         "OR H T",
         "AND T J",
-        "RUN",
+        "RUN"
     )
     springScript(line, instructions2, whichPart = 2)
-
 }
 
 private fun springScript(line: List<BigInteger>, instructions: List<String>, whichPart: Int) {
@@ -39,15 +38,11 @@ private fun springScript(line: List<BigInteger>, instructions: List<String>, whi
     var context = ProgramContext()
     while (!context.isHalted && context.output?.toInt()?.toChar() != '\n') {
         context = runIntCodeProgram(program, emptyList(), context)
-        //print(context.output?.toInt()?.toChar())
     }
     context = runIntCodeProgram(program, instructions.fold("") { total, i -> total + i + '\n' }.map { it.code.toBigInteger() }, context)
     while (!context.isHalted) {
         context = runIntCodeProgram(program, emptyList(), context)
         val res = context.output?.toInt()
         if (res != null && res > 128) println("part$whichPart=$res")
-        /*else {
-            res?.let { print(it.toChar()) }
-        }*/
     }
 }
