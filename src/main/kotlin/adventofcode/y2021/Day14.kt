@@ -5,15 +5,36 @@ import adventofcode.split
 
 fun main() {
     val lines = readFile("src/main/resources/y2021/day14.txt")
-    val polymer = lines.first()
+    val originalPolymer = lines.first()
     val rules = lines.filter { it.contains('-') }.map { split(it) }.associate { it.first() to it.last() }
-    val grouping = (1..10).fold(polymer) { total, i -> println(i); iterate(total, rules) }.groupBy { it }.map { it.key to it.value.size }
-    println("part1=" + (grouping.maxOf { it.second } - grouping.minOf { it.second }))
-    val grouping2 = (1..40).fold(polymer) { total, i -> println(i); iterate(total, rules) }.groupBy { it }.map { it.key to it.value.size }
-    println("part2=" + (grouping2.maxOf { it.second } - grouping2.minOf { it.second }))
+    val polymers = originalPolymer.windowed(2, 1).groupBy { it }.map { it.key to it.value.size.toLong() }.toMap()
+    println("part1=" + iterate(steps = 10, originalPolymer, polymers, rules))
+    println("part2=" + iterate(steps = 40, originalPolymer, polymers, rules))
 }
 
-private fun iterate(polymer: String, rules: Map<String, String>): String {
-    println("sizey=" + polymer.length)
-    return polymer.windowed(size = 2, step = 1).map { it.first() + rules.getValue(it) }.fold("") { total, i -> total + i } + polymer.last()
+private fun iterate(steps: Int, original: String, polymers: Map<String, Long>, rules: Map<String, String>): Long {
+    val grouping3 = (1..steps).fold(polymers) { total, _ -> iterateInternal(total, rules) }
+    val summary3 = ('A'..'Z').map { c ->
+        val start = if (c == original.first()) 1 else 0
+        val end = if (c == original.last()) 1 else 0
+        val groupingCount = grouping3.map {
+            when {
+                it.key == "" + c + c -> it.value * 2
+                c in it.key -> it.value
+                else -> 0L
+            }
+        }.sum()
+        (groupingCount + start + end) / 2
+    }.filter { it != 0L }
+    return summary3.max() - summary3.min()
+}
+
+private fun iterateInternal(polymers: Map<String, Long>, rules: Map<String, String>): Map<String, Long> {
+    val result = mutableMapOf<String, Long>()
+    polymers.forEach {
+        val rule = rules.getValue(it.key)
+        result[it.key.first() + rule] = result.getOrDefault(it.key.first() + rule, 0L) + it.value
+        result[rule + it.key.last()] = result.getOrDefault(rule + it.key.last(), 0L) + it.value
+    }
+    return result
 }
