@@ -1,5 +1,6 @@
 package adventofcode
 
+import adventofcode.y2015.primes
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -136,4 +137,27 @@ data class Coord3D(val x: Int, val y: Int, val z: Int) {
         }
 
     fun absSumOfCoords() = abs(x) + abs(y) + abs(z)
+}
+
+private val primeSet = mutableSetOf(2, 3, 5, 7, 11, 13, 17, 19)
+fun primes(max: Int): Set<Int> {
+    ((primeSet.max() + 1)..max).forEach { i ->
+        if (primeSet.none { i % it == 0 }) primeSet.add(i)
+    }
+    return primeSet.filter { it <= max }.toSet()
+}
+
+fun divisors(i: Int): List<Int> {
+    if (i == 1) return emptyList()
+    val first = primes(i).first { i % it == 0 }
+    return listOf(first) + divisors(i / first)
+}
+
+fun lcm(list: List<Int>): Int {
+    val max = list.max()
+    var cur = max
+    while (true) {
+        if (list.all { cur % it == 0 }) return cur
+        cur += max
+    }
 }
