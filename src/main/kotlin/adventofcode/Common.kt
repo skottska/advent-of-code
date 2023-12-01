@@ -1,6 +1,5 @@
 package adventofcode
 
-import adventofcode.y2015.primes
 import java.io.File
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -53,13 +52,13 @@ data class Coord(val row: Int, val col: Int) {
         copy(col = col - 1),
         copy(col = col + 1),
         copy(row = row - 1),
-        copy(row = row + 1)
+        copy(row = row + 1),
     )
     fun aroundDiag() = around() + listOf(
         Coord(row + 1, col - 1),
         Coord(row + 1, col + 1),
         Coord(row - 1, col - 1),
-        Coord(row - 1, col + 1)
+        Coord(row - 1, col + 1),
     )
 }
 data class DirectedCoord(val facing: Facing, val coord: Coord) {
