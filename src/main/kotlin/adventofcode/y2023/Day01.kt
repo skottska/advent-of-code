@@ -10,29 +10,18 @@ fun main() {
         matchNumbers("" + digits.first() + "" + digits.last()).first()
     }
     println("part1=" + nums.sum())
-
-    val digits = lines.map { matchNumbers(findFirstDigit(it, true) + findFirstDigit(it, false)).first() }
+    val digits = lines.map { matchNumbers(firstDigit(it, true) + firstDigit(it, false)).first() }
     println("part2=" + digits.sum())
 }
 
-private fun findFirstDigit(s: String, direction: Boolean): String {
-    val replace = listOf(
-        "one" to 1,
-        "two" to 2,
-        "three" to 3,
-        "four" to 4,
-        "five" to 5,
-        "six" to 6,
-        "seven" to 7,
-        "eight" to 8,
-        "nine" to 9
-    )
+private fun firstDigit(s: String, direction: Boolean): String {
+    val replace = listOf("one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
     val indices = if (direction) s.indices else s.indices.reversed()
     indices.forEach { index ->
         if (s[index].isDigit()) return s[index].toString()
-        replace.forEach { r ->
-            if (s.substring(index).startsWith(r.first)) {
-                return "" + r.second
+        replace.forEachIndexed { rIndex, r ->
+            if (s.substring(index).startsWith(r)) {
+                return "" + (rIndex + 1)
             }
         }
     }
