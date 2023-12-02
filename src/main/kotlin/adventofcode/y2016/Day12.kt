@@ -3,35 +3,46 @@ package adventofcode.y2016 // ktlint-disable filename
 import adventofcode.matchNumbers
 import adventofcode.readFile
 import adventofcode.split
+import java.lang.IllegalArgumentException
 
 fun main() {
     val lines = readFile("src/main/resources/y2016/day12.txt")
-    println("part1=" + iterate(lines, mutableMapOf("a" to 0, "b" to 0, "c" to 0, "d" to 0)))
-    println("part2=" + iterate(lines, mutableMapOf("a" to 0, "b" to 0, "c" to 1, "d" to 0)))
+
+    val insts = lines.map { line ->
+        val split = split(line)
+        when (split[0]) {
+            "inc" -> Inc(split[1])
+            "dec" -> Dec(split[1])
+            "cpy" -> {
+                val nums = matchNumbers(split[1])
+                if (nums.isEmpty()) CpyRegister(split[1], split[2])
+                else CpyValue(nums.first(), split[2])
+            }
+            "jnz" -> {
+                val nums = matchNumbers(split[1])
+                if (nums.isEmpty()) JnzRegisterValue(split[1], matchNumbers(split[2]).first())
+                else JnzValueValue(nums.first(), matchNumbers(split[2]).first())
+            }
+            else -> throw IllegalArgumentException("Unknown $line")
+        }
+    }
+    println("part1=" + iterate(insts, mutableMapOf("a" to 0, "b" to 0, "c" to 0, "d" to 0)))
+    println("part2=" + iterate(insts, mutableMapOf("a" to 0, "b" to 0, "c" to 1, "d" to 0)))
 }
 
-private fun iterate(lines: List<String>, map: MutableMap<String, Int>): Int {
+private fun iterate(lines: List<Instruction>, map: MutableMap<String, Int>): Int {
     var pos = 0
     while (pos < lines.size) {
-        val line = split(lines[pos])
-        when (line[0]) {
-            "inc" -> map[line[1]] = map.getValue(line[1]) + 1
-            "dec" -> map[line[1]] = map.getValue(line[1]) - 1
-            "cpy" -> map[line[2]] = decode(map, line[1])
-            else -> {
-                val decode = decode(map, line[1])
-                pos += if (decode == 0) 0 else decode(map, line[2]) - 1
-            }
+        when (val inst = lines[pos]) {
+            is Inc -> map[inst.register] = map.getValue(inst.register) + 1
+            is Dec -> map[inst.register] = map.getValue(inst.register) - 1
+            is CpyValue -> map[inst.to] = inst.value
+            is CpyRegister -> map[inst.to] = map.getValue(inst.from)
+            is JnzValueValue -> pos += if (inst.value == 0) 0 else inst.jump - 1
+            is JnzRegisterValue -> pos += if (map.getValue(inst.from) == 0) 0 else inst.jump - 1
+            else -> throw UnsupportedOperationException("Can't handle $inst")
         }
         pos += 1
     }
     return map.getValue("a")
-}
-
-private fun decode(map: Map<String, Int>, decode: String): Int {
-    val num = matchNumbers(decode)
-    return when {
-        num.isEmpty() -> map.getValue(decode)
-        else -> num.first()
-    }
 }
