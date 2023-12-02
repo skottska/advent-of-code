@@ -44,7 +44,6 @@ fun main() {
 private fun iterate(lines: MutableList<Instruction>, map: MutableMap<String, Int>): Int {
     var pos = 0
     while (pos < lines.size) {
-        println("" + map + " pos=" + (pos + 1))
         when (val inst = lines[pos]) {
             is Inc -> map[inst.register] = map.getValue(inst.register) + 1
             is Dec -> map[inst.register] = map.getValue(inst.register) - 1
@@ -89,4 +88,4 @@ data class JnzRegisterRegister(val from: String, val to: String) : Instruction {
 data class Tgl(val from: String) : Instruction { override fun toggle() = Inc(from) }
 object Nada : Instruction { override fun toggle(): Instruction { throw UnsupportedOperationException("Can't reverse Nada") } }
 data class Move(val from: String, val to: String) : Instruction { override fun toggle(): Instruction { throw UnsupportedOperationException("Can't reverse Move") } }
-data class Mult(val from: String, val by: String, val to: String) : Instruction { override fun toggle(): Instruction { throw UnsupportedOperationException("Can't reverse Move") } }
+data class Mult(val from: String, val by: String, val to: String) : Instruction { override fun toggle(): Instruction { throw UnsupportedOperationException("Can't reverse Mult") } }
