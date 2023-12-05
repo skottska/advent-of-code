@@ -7,13 +7,7 @@ import kotlin.math.min
 fun main() {
     val line = readFile("src/main/resources/y2017/day10.txt")[0]
     println("part1=" + round(input = matchNumbers(line), numRounds = 1).let { it[0] * it[1] })
-
-    val asciiLine = line.map { if (it == ',') 44 else it.code - '0'.code + 48 }
-    val part2 = round(input = asciiLine + listOf(17, 31, 73, 47, 23), numRounds = 64)
-        .windowed(size = 16, step = 16) { it.reduce { acc, i -> acc xor i } }
-        .map { it.toString(16) }
-        .reduce { acc, i -> acc + i }
-    println("part2=$part2")
+    println("part2=" + Year2017.knotHash(line))
 }
 
 private fun round(input: List<Int>, numRounds: Int): List<Int> {
