@@ -1,15 +1,12 @@
 package adventofcode.y2023 // ktlint-disable filename
 
 import adventofcode.Coord
+import adventofcode.mapCoord
 import adventofcode.matchNumbers
 import adventofcode.readFile
 
 fun main() {
-    val coords = readFile("src/main/resources/y2023/day03.txt").mapIndexed { row, line ->
-        line.mapIndexed { col, c ->
-            Coord(row, col) to c
-        }
-    }.flatten().toMap()
+    val coords = readFile("src/main/resources/y2023/day03.txt").mapCoord()
     val nextToSymbol = coords.filter { c ->
         c.value.isDigit() && c.key.aroundDiag().any { a ->
             val char = coords.getOrDefault(a, '.')
@@ -17,7 +14,7 @@ fun main() {
         }
     }.map { it.key }
 
-    val numbers = coords.map {
+    val numbers = coords.mapNotNull {
         val numPos = mutableListOf<Coord>()
         var digits = ""
         if (it.value.isDigit() && !coords.getOrDefault(it.key.left(), '.').isDigit()) {
@@ -28,7 +25,7 @@ fun main() {
                 cur = cur.right()
             }
         }
-        numPos to matchNumbers(digits).first()
+        if (numPos.isEmpty()) null else numPos to matchNumbers(digits).first()
     }.filter { n -> n.first.any { it in nextToSymbol } }
 
     println("part1=" + numbers.sumOf { it.second })

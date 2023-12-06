@@ -52,13 +52,13 @@ data class Coord(val row: Int, val col: Int) {
         copy(col = col - 1),
         copy(col = col + 1),
         copy(row = row - 1),
-        copy(row = row + 1),
+        copy(row = row + 1)
     )
     fun aroundDiag() = around() + listOf(
         Coord(row + 1, col - 1),
         Coord(row + 1, col + 1),
         Coord(row - 1, col - 1),
-        Coord(row - 1, col + 1),
+        Coord(row - 1, col + 1)
     )
 }
 data class DirectedCoord(val facing: Facing, val coord: Coord) {
@@ -97,6 +97,7 @@ fun printCoords(cs: Collection<Coord>, printFunc: (c: Coord) -> String) {
         println()
     }
 }
+fun List<String>.mapCoord() = mapIndexed { row, line -> line.mapIndexed { col, c -> Coord(row, col) to c } }.flatten().toMap()
 
 fun <T> transpose(l: List<List<T>>) = (0 until l.first().size).map { colIndex -> l.map { it[colIndex] } }
 
