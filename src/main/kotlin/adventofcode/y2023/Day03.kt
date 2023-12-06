@@ -35,8 +35,7 @@ fun main() {
 
     val part2 = coords.filter { it.value == '*' }.map { it.key.aroundDiag() }.sumOf { star ->
         val numbersNextTo = numbers.filter { n -> n.first.any { it in star } }.map { it.second }
-        if (numbersNextTo.size == 2) numbersNextTo.first() * numbersNextTo.last()
-        else 0
+        if (numbersNextTo.size == 2) numbersNextTo.first() * numbersNextTo.last() else 0
     }
 
     println("part2=$part2")
