@@ -22,9 +22,8 @@ private fun totalWinnings(hands: List<Pair<String, Int>>, wildcard: Boolean) = h
 
 private fun equalHandCompareTo(a: String, b: String, wildcard: Boolean): Int {
     a.indices.forEach {
-        val cardValueA = cardValue(a[it], wildcard)
-        val cardValueB = cardValue(b[it], wildcard)
-        if (cardValueA != cardValueB) return cardValueA.compareTo(cardValueB)
+        val compareTo = cardValue(a[it], wildcard).compareTo(cardValue(b[it], wildcard))
+        if (compareTo != 0) return compareTo
     }
     return 0
 }
@@ -39,12 +38,10 @@ private fun cardValue(c: Char, wildcard: Boolean): Int = when {
 }
 
 private fun handValue(s: String, wildcard: Boolean): Int {
-    var group = s.groupBy { it }.map { it.key to it.value.size }.toMap()
+    val group = s.groupBy { it }.map { it.key to it.value.size }.toMap().toMutableMap()
     if (wildcard) {
-        val jokerSize = group.getOrDefault('J', 0)
-        if (jokerSize == 5) return 7
-        val maxNonJokers = group.filter { it.key != 'J' }.maxBy { it.value }.key
-        group = group.filter { it.key != 'J' }.map { if (it.key == maxNonJokers) it.key to it.value + jokerSize else it.key to it.value }.toMap()
+        val jokerSize = group.remove('J') ?: 0
+        group.maxByOrNull { it.value }?.let { group.replace(it.key, it.value + jokerSize) } ?: return 7
     }
     return when {
         group.size == 1 -> 7
