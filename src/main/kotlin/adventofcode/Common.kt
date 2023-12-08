@@ -52,13 +52,13 @@ data class Coord(val row: Int, val col: Int) {
         copy(col = col - 1),
         copy(col = col + 1),
         copy(row = row - 1),
-        copy(row = row + 1)
+        copy(row = row + 1),
     )
     fun aroundDiag() = around() + listOf(
         Coord(row + 1, col - 1),
         Coord(row + 1, col + 1),
         Coord(row - 1, col - 1),
-        Coord(row - 1, col + 1)
+        Coord(row - 1, col + 1),
     )
 }
 data class DirectedCoord(val facing: Facing, val coord: Coord) {
@@ -153,11 +153,11 @@ fun divisors(i: Int): List<Int> {
     return listOf(first) + divisors(i / first)
 }
 
-fun lcm(list: List<Int>): Int {
-    val max = list.max()
-    var cur = max
-    while (true) {
-        if (list.all { cur % it == 0 }) return cur
-        cur += max
-    }
-}
+private fun gcd(x: Int, y: Int): Int = if (y == 0) x else gcd(y, x % y)
+private fun gcd(x: Long, y: Long): Long = if (y == 0L) x else gcd(y, x % y)
+
+fun gcd(numbers: List<Long>) = numbers.fold(0L) { x, y -> gcd(x, y) }
+fun gcd(numbers: List<Int>) = numbers.fold(0) { x, y -> gcd(x, y) }
+
+fun lcm(numbers: List<Long>) = numbers.fold(1L) { x, y -> x * (y / gcd(x, y)) }
+fun lcm(numbers: List<Int>) = numbers.fold(1) { x, y -> x * (y / gcd(x, y)) }
