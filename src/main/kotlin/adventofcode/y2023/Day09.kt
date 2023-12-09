@@ -5,17 +5,11 @@ import adventofcode.readFile
 
 fun main() {
     val lines = readFile("src/main/resources/y2023/day09.txt").map { matchNumbers(it) }
-
     println("part1=" + lines.sumOf { nextInSequence(it) })
-    println("part2=" + lines.sumOf { prevInSequence(it) })
+    println("part2=" + lines.sumOf { nextInSequence(it.reversed()) })
 }
 
-private fun nextInSequence(lines: List<Int>): Int {
-    return if (lines.toSet().size == 1) lines.first()
-    else nextInSequence(lines.windowed(size = 2).map { it.last() - it.first() }) + lines.last()
-}
-
-private fun prevInSequence(lines: List<Int>): Int {
-    return if (lines.toSet().size == 1) lines.first()
-    else lines.first() - prevInSequence(lines.windowed(size = 2).map { it.last() - it.first() })
+private fun nextInSequence(lines: List<Int>): Int = when (lines.toSet().size == 1) {
+    true -> lines.first()
+    false -> nextInSequence(lines.windowed(size = 2).map { it.last() - it.first() }) + lines.last()
 }
