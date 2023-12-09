@@ -9,7 +9,5 @@ fun main() {
     println("part2=" + lines.sumOf { next(it.reversed()) })
 }
 
-private fun next(lines: List<Int>): Int = when (lines.toSet().size == 1) {
-    true -> lines[0]
-    false -> next(lines.windowed(size = 2).map { it[1] - it[0] }) + lines.last()
-}
+private fun next(lines: List<Int>): Int = if (lines.toSet().size == 1) lines[0]
+    else next(lines.windowed(size = 2).map { it[1] - it[0] }) + lines.last()
