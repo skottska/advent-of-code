@@ -5,13 +5,10 @@ import adventofcode.readFile
 
 fun main() {
     val lines = readFile("src/main/resources/y2023/day01.txt")
-    val nums = lines.map { line ->
-        val digits = line.filter { it.isDigit() }
-        matchNumbers("" + digits.first() + "" + digits.last()).first()
-    }
-    println("part1=" + nums.sum())
-    val digits = lines.map { matchNumbers(firstDigit(it, true) + firstDigit(it, false)).first() }
-    println("part2=" + digits.sum())
+    val nums = lines.sumOf { l -> l.filter { it.isDigit() }.let { matchNumbers(it.first() + "" + it.last()).first() } }
+    println("part1=$nums")
+    val digits = lines.sumOf { matchNumbers(firstDigit(it, true) + firstDigit(it, false)).first() }
+    println("part2=$digits")
 }
 
 private fun firstDigit(s: String, direction: Boolean): String {
