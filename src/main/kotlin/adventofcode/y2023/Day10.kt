@@ -3,6 +3,7 @@ package adventofcode.y2023 // ktlint-disable filename
 import adventofcode.Coord
 import adventofcode.Facing
 import adventofcode.mapCoord
+import adventofcode.printCoords
 import adventofcode.readFile
 
 fun main() {
@@ -44,9 +45,18 @@ fun main() {
     }
     println("part1=" + (loop.size + 1) / 2)
 
-    part2(grid, lines, loop)
+    part2(grid.toMutableMap(), lines, loop)
+    part2New(grid, loop)
 }
 
+private fun part2New(grid: MutableMap<Coord, Char>, loop: MutableSet<Coord>) {
+    grid.filter { it.key !in loop }.forEach { grid[it.key] = '.' }
+
+    val answer = grid.filter { it.value != 'X' && it.key !in loop }.filter { cur ->
+        grid.count { it.value in listOf('|', 'J', 'L') && it.key.row == cur.key.row && it.key.col < cur.key.col } % 2 != 0
+    }
+    println("part2="+answer.size)
+}
 private fun moveCoord(curSymbol: Char, cur: Coord) = when (curSymbol) {
     '|' -> listOf(cur.down(), cur.up())
     '-' -> listOf(cur.left(), cur.right())
