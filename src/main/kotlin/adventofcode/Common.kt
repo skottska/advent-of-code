@@ -79,6 +79,7 @@ enum class Facing(val move: Coord) {
     }
 
     fun move(c: Coord) = Coord(c.row + move.row, c.col + move.col)
+    fun move(c: Coord, numSteps: Int) = Coord(c.row + move.row * numSteps, c.col + move.col * numSteps)
 }
 
 fun printCoords(cs: Collection<Coord>, printFunc: (c: Coord) -> String) {
