@@ -1,6 +1,7 @@
 package adventofcode
 
 import java.io.File
+import java.lang.IllegalArgumentException
 import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.math.abs
@@ -158,3 +159,25 @@ fun gcd(numbers: List<Int>) = numbers.fold(0) { x, y -> gcd(x, y) }
 
 fun lcm(numbers: List<Long>) = numbers.fold(1L) { x, y -> x * (y / gcd(x, y)) }
 fun lcm(numbers: List<Int>) = numbers.fold(1) { x, y -> x * (y / gcd(x, y)) }
+
+/**
+ * Pair(a, b) of form: a is loop, b is the remainder
+ */
+fun crt(list: List<Pair<Long, Long>>): Long {
+    val m = list.fold(1L) { total, i -> total * i.first }
+    return list.sumOf { i ->
+        val m1 = m / i.first
+        val mInverse = modInverse(m1, i.first)
+        m1 * mInverse * i.second
+    } % m
+}
+
+fun modInverse(number: Long, base: Long): Long {
+    val a = number % base
+    for (x in 1L until base) {
+        if ((a * x) % base == 1L) {
+            return x
+        }
+    }
+    throw IllegalArgumentException("No inverse of number=$number base=$base")
+}
