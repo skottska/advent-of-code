@@ -48,18 +48,12 @@ data class Coord(val row: Int, val col: Int) {
     fun left() = copy(col = col - 1)
     fun down() = copy(row = row + 1)
     fun up() = copy(row = row - 1)
-    fun around() = listOf(
-        copy(col = col - 1),
-        copy(col = col + 1),
-        copy(row = row - 1),
-        copy(row = row + 1),
-    )
-    fun aroundDiag() = around() + listOf(
-        Coord(row + 1, col - 1),
-        Coord(row + 1, col + 1),
-        Coord(row - 1, col - 1),
-        Coord(row - 1, col + 1),
-    )
+    fun upRight() = up().right()
+    fun downRight() = down().right()
+    fun upLeft() = up().left()
+    fun downLeft() = down().left()
+    fun around() = listOf(left(), right(), up(), down())
+    fun aroundDiag() = around() + listOf(upRight(), upLeft(), downRight(), downLeft())
 }
 data class DirectedCoord(val facing: Facing, val coord: Coord) {
     fun left() = copy(facing = facing.left())
