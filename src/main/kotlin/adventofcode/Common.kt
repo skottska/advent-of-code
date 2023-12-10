@@ -161,7 +161,7 @@ fun lcm(numbers: List<Long>) = numbers.fold(1L) { x, y -> x * (y / gcd(x, y)) }
 fun lcm(numbers: List<Int>) = numbers.fold(1) { x, y -> x * (y / gcd(x, y)) }
 
 /**
- * Implementation of the Chinese Remainder Theorem Pair(a, b) of form: a is loop, b is the remainder
+ * Implementation of the Chinese Remainder Theorem. Pair(a, b) of form: a is loop, b is the remainder
  */
 fun crt(list: List<Pair<Long, Long>>): Long {
     val m = list.fold(1L) { total, i -> total * i.first }
