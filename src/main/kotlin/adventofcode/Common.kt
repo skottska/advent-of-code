@@ -96,6 +96,7 @@ fun printCoords(cs: Collection<Coord>, printFunc: (c: Coord) -> String) {
 fun List<String>.mapCoord() = mapIndexed { row, line -> line.mapIndexed { col, c -> Coord(row, col) to c } }.flatten().toMap()
 
 fun <T> transpose(l: List<List<T>>) = (0 until l.first().size).map { colIndex -> l.map { it[colIndex] } }
+fun transposeStrings(l: List<String>) = (0 until l.first().length).map { colIndex -> l.map { it[colIndex] } }.map { it.asString() }
 fun <T> rotate(l: List<List<T>>) = transpose(l).map { it.reversed() }
 
 inline fun <T> Iterable<T>.firstIndexed(predicate: (index: Int, T) -> Boolean): T {
