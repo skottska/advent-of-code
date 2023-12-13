@@ -34,13 +34,17 @@ private class Program(val registers: MutableMap<Char, Long> = mutableMapOf(), va
     }
 }
 
-private fun commonCommands(registers: MutableMap<Char, Long>, split: List<String>): Int? = when (split[0]) {
-    "set" -> { registers[split[1].first()] = getVal(registers, split[2]); 1 }
-    "add" -> { registers[split[1].first()] = registers.getOrDefault(split[1].first(), 0) + getVal(registers, split[2]); 1 }
-    "mul" -> { registers[split[1].first()] = registers.getOrDefault(split[1].first(), 0) * getVal(registers, split[2]); 1 }
-    "mod" -> { registers[split[1].first()] = registers.getOrDefault(split[1].first(), 0) % getVal(registers, split[2]); 1 }
-    "jgz" -> if (getVal(registers, split[1]) > 0) getVal(registers, split[2]).toInt() else 1
-    else -> null
+private fun commonCommands(registers: MutableMap<Char, Long>, split: List<String>): Int? {
+    val valFunc = { i: Int -> getVal(registers, split[i]) }
+    val to = split[1].first()
+    return when (split[0]) {
+        "set" -> { registers[to] = valFunc(2); 1 }
+        "add" -> { registers[to] = valFunc(1) + valFunc(2); 1 }
+        "mul" -> { registers[to] = valFunc(1) * valFunc(2); 1 }
+        "mod" -> { registers[to] = valFunc(1) % valFunc(2); 1 }
+        "jgz" -> if (getVal(registers, split[1]) > 0) getVal(registers, split[2]).toInt() else 1
+        else -> null
+    }
 }
 
 private fun part1(lines: List<String>) {
