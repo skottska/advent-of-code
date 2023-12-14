@@ -18,11 +18,11 @@ private fun south(grid: List<String>) = transposeStrings(transposeStrings(grid).
 private fun east(grid: List<String>) = grid.map { eastRow(it) }
 private fun west(grid: List<String>) = grid.map { westRow(it) }
 
+private fun westRow(row: String) = replaceRow(row, ".O", "O.")
+private fun eastRow(row: String) = replaceRow(row, "O.", ".O")
+
 private fun replaceRow(row: String, from: String, to: String): String {
     var newRow = row
     while (newRow.contains(from)) newRow = newRow.replace(from, to)
     return newRow
 }
-
-private fun westRow(row: String) = replaceRow(row, ".O", "O.")
-private fun eastRow(row: String) = replaceRow(row, "O.", ".O")
