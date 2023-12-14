@@ -1,7 +1,6 @@
 package adventofcode
 
 import java.io.File
-import java.lang.IllegalArgumentException
 import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.math.abs
@@ -181,4 +180,25 @@ fun modInverse(number: Long, base: Long): Long {
         }
     }
     throw IllegalArgumentException("No inverse of number=$number base=$base")
+}
+
+/**
+ * Will run the same function n times.
+ *
+ * If it finds a loop before it reaches n, then it will find the modulus of n by the loop and the offset to the loop's start
+ * Then it will run the appropriate remaining number of times to simulate having run n times.
+ */
+fun <T> runNTimes(func: (T) -> T, init: T, n: Long): T {
+    val seen = mutableListOf<T>()
+    var cur = init
+    var times = 0L
+    while (cur !in seen) {
+        seen += cur
+        cur = func(cur)
+        if (++times == n) return cur
+    }
+    val offset = seen.indexOf(cur)
+    val loop = seen.size - offset
+    val afterLoop = (n - offset) % loop
+    return (1..afterLoop).fold(cur) { total, _ -> func(total) }
 }
