@@ -202,3 +202,17 @@ fun <T> runNTimes(func: (T) -> T, init: T, n: Long): T {
     val afterLoop = (n - offset) % loop
     return (1..afterLoop).fold(cur) { total, _ -> func(total) }
 }
+
+fun <T> findOffsetAndLoop(func: (T) -> T, init: T): Pair<Int, Int> {
+    val seen = mutableListOf<T>()
+    var cur = init
+    var times = 0L
+    while (cur !in seen) {
+        seen += cur
+        cur = func(cur)
+        times++
+    }
+    val offset = seen.indexOf(cur)
+    val loop = seen.size - offset
+    return offset to loop
+}
