@@ -237,18 +237,18 @@ fun <T> findOffsetAndLoop(func: (T) -> T, init: T): Pair<Int, Int> {
 }
 
 /**
- * Finds the area within the given coords. The coords must be in order that they are connected to one another.
+ * Finds the numberof coords  within the given coords corners. The coords must be in order that they are connected to one another.
  * Cannot be disjointed (i.e. no holes inside)
  */
-fun lagoonSize(coords: List<Coord>): Long {
+fun lagoonSize(corners: List<Coord>): Long {
     val area = abs(
-        coords.foldIndexed(0L) { i, total, c ->
-            val next = coords[(i + 1) % coords.size]
+        corners.foldIndexed(0L) { i, total, c ->
+            val next = corners[(i + 1) % corners.size]
             total + c.col.toLong() * next.row - c.row.toLong() * next.col
         } / 2
     )
-    val perimeter = coords.foldIndexed(0L) { i, total, c ->
-        val next = coords[(i + 1) % coords.size]
+    val perimeter = corners.foldIndexed(0L) { i, total, c ->
+        val next = corners[(i + 1) % corners.size]
         total + abs(c.row - next.row) + abs(c.col - next.col)
     }
     return area + 1 + perimeter / 2
