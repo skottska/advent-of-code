@@ -2,6 +2,7 @@ package adventofcode.y2022 // ktlint-disable filename
 
 import adventofcode.anyRange
 import adventofcode.matchNumbersLong
+import adventofcode.mergeRanges
 import adventofcode.readFile
 import kotlin.math.abs
 import kotlin.math.max
@@ -40,17 +41,6 @@ private fun onRow(row: Long, sensor: Sensor): LongRange? {
     val rowD = abs(sensor.y - row)
     return if (rowD > beaconD) null
     else anyRange(sensor.x + (beaconD - rowD), sensor.x - (beaconD - rowD))
-}
-
-private fun mergeRanges(ranges: List<LongRange>) = ranges.sortedBy { it.first }.fold(listOf<LongRange>()) { total, it ->
-    when {
-        total.isEmpty() -> listOf(it)
-        else -> {
-            val last = total.last()
-            if (last.last >= it.first - 1) total.dropLast(1) + listOf(LongRange(last.first, max(it.last, last.last)))
-            else total + listOf(it)
-        }
-    }
 }
 
 private fun filterRanges(ranges: List<LongRange>, filterRange: LongRange) = ranges.mapNotNull {

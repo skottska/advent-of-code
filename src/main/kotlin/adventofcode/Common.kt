@@ -39,6 +39,17 @@ fun minOfNull(x: Int?, y: Int?) = when {
     else -> min(x, y)
 }
 
+fun mergeRanges(ranges: List<LongRange>) = ranges.sortedBy { it.first }.fold(listOf<LongRange>()) { total, it ->
+    when {
+        total.isEmpty() -> listOf(it)
+        else -> {
+            val last = total.last()
+            if (last.last >= it.first - 1) total.dropLast(1) + listOf(LongRange(last.first, max(it.last, last.last)))
+            else total + listOf(it)
+        }
+    }
+}
+
 fun anyRange(a: Int, b: Int) = min(a, b)..(max(a, b))
 fun anyRange(a: Long, b: Long) = min(a, b)..(max(a, b))
 fun anyRange(a: List<Int>) = a.min()..a.max()
@@ -63,6 +74,11 @@ data class DirectedCoord(val facing: Facing, val coord: Coord) {
 
 enum class Facing(val move: Coord) {
     UP(Coord(-1, 0)), RIGHT(Coord(0, 1)), DOWN(Coord(1, 0)), LEFT(Coord(0, -1));
+
+    fun isLeftTurn(f2: Facing): Boolean = when {
+        isHoriz() != f2.isHoriz() -> left() == f2
+        else -> throw IllegalArgumentException("Cannot check for left turn on this=$this f2=$f2")
+    }
 
     fun left() = when (this) {
         UP -> LEFT
@@ -218,4 +234,22 @@ fun <T> findOffsetAndLoop(func: (T) -> T, init: T): Pair<Int, Int> {
     val offset = seen.indexOf(cur)
     val loop = seen.size - offset
     return offset to loop
+}
+
+/**
+ * Finds the area within the given coords. The coords must be in order that they are connected to one another.
+ * Cannot be disjointed (i.e. no holes inside)
+ */
+fun lagoonSize(coords: List<Coord>): Long {
+    val area = abs(
+        coords.foldIndexed(0L) { i, total, c ->
+            val next = coords[(i + 1) % coords.size]
+            total + c.col.toLong() * next.row - c.row.toLong() * next.col
+        } / 2
+    )
+    val perimeter = coords.foldIndexed(0L) { i, total, c ->
+        val next = coords[(i + 1) % coords.size]
+        total + abs(c.row - next.row) + abs(c.col - next.col)
+    }
+    return area + 1 + perimeter / 2
 }
