@@ -18,6 +18,7 @@ fun matches(line: String, regex: String) = Regex(regex)
 
 private const val NUMBER_REGEX = "-?[0-9]+"
 
+fun matchNumber(line: String) = matches(line, NUMBER_REGEX).map { it.toInt() }.first()
 fun matchNumbers(line: String) = matches(line, NUMBER_REGEX).map { it.toInt() }
 fun matchNumbersToBigInt(line: String) = matches(line, NUMBER_REGEX).map { it.toBigInteger() }
 fun matchPositiveNumbers(line: String) = matches(line, "[0-9]+").map { it.toInt() }
