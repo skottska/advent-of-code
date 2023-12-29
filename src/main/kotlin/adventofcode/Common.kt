@@ -54,7 +54,9 @@ fun mergeRanges(ranges: List<LongRange>) = ranges.sortedBy { it.first }.fold(lis
 fun anyRange(a: Int, b: Int) = min(a, b)..(max(a, b))
 fun anyRange(a: Long, b: Long) = min(a, b)..(max(a, b))
 fun anyRange(a: List<Int>) = a.min()..a.max()
-data class Coord(val row: Int, val col: Int) {
+
+interface Node
+data class Coord(val row: Int, val col: Int): Node {
     fun distance(b: Coord) = abs(row - b.row) + abs(col - b.col)
     fun right() = copy(col = col + 1)
     fun left() = copy(col = col - 1)
