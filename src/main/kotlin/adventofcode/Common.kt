@@ -55,8 +55,9 @@ fun anyRange(a: Int, b: Int) = min(a, b)..(max(a, b))
 fun anyRange(a: Long, b: Long) = min(a, b)..(max(a, b))
 fun anyRange(a: List<Int>) = a.min()..a.max()
 
+data class Edge(val node1: Node, val node2: Node, val distance: Int)
 interface Node
-data class Coord(val row: Int, val col: Int): Node {
+data class Coord(val row: Int, val col: Int) : Node {
     fun distance(b: Coord) = abs(row - b.row) + abs(col - b.col)
     fun right() = copy(col = col + 1)
     fun left() = copy(col = col - 1)
@@ -157,6 +158,7 @@ data class Coord3D(val x: Int, val y: Int, val z: Int) {
         }
 
     fun absSumOfCoords() = abs(x) + abs(y) + abs(z)
+    fun down() = copy(z = z - 1)
 }
 
 private val primeSet = mutableSetOf(2, 3, 5, 7, 11, 13, 17, 19)
@@ -248,11 +250,59 @@ fun lagoonSize(corners: List<Coord>): Long {
         corners.foldIndexed(0L) { i, total, c ->
             val next = corners[(i + 1) % corners.size]
             total + c.col.toLong() * next.row - c.row.toLong() * next.col
-        } / 2
+        } / 2,
     )
     val perimeter = corners.foldIndexed(0L) { i, total, c ->
         val next = corners[(i + 1) % corners.size]
         total + abs(c.row - next.row) + abs(c.col - next.col)
     }
     return area + 1 + perimeter / 2
+}
+
+/**
+ * Not the quickest function. Fast enough but can be optimised further
+ */
+fun findLongestDistance(edges: List<Edge>, start: Node, end: Node): Int? {
+    var newEnd: Node = end
+    var pruned = 0
+    while (edges.count { it.node2 == newEnd } == 1) {
+        val prune = edges.first { it.node2 == newEnd }
+        pruned += prune.distance
+        newEnd = prune.node1
+    }
+    return findLongestDistanceInternal(edges, start, newEnd)?.plus(pruned)
+}
+
+private fun findLongestDistanceInternal(edges: List<Edge>, start: Node, end: Node, path: Int = 0, seen: List<Node> = emptyList()): Int? {
+    val next = edges.filter { it.node1 == start && it.node2 !in seen }
+
+    return next.mapNotNull {
+        if (it.node2 == end) path + it.distance
+        else findLongestDistanceInternal(edges, it.node2, end, path + it.distance, seen + start)
+    }.maxOrNull()
+}
+
+/**
+ * Dijkstras algorithm for shortest path. Note: You cannot simply negate the distances to get the longest path!
+ */
+fun findShortestPath(edges: List<Edge>, start: Node, end: Node): Int? {
+    val q = edges.flatMap { listOf(it.node1, it.node2) }.toSet().toMutableSet()
+    val dist = q.associateWith { Integer.MAX_VALUE }.toMutableMap()
+    dist[start] = 0
+
+    while (q.isNotEmpty()) {
+        val u = q.minByOrNull { dist.getOrDefault(it, 0) }
+        q.remove(u)
+
+        if (u == end) break // Found the shortest path to target
+        edges.filter { it.node1 == u && it.node2 in q }
+            .forEach { edge ->
+                val next = edge.node2
+                val alt = dist.getOrDefault(u, 0) + edge.distance
+                if (alt < dist.getOrDefault(next, 0)) dist[next] = alt
+            }
+    }
+
+    val shortest = dist[end]
+    return if (shortest == Integer.MAX_VALUE) null else shortest
 }
