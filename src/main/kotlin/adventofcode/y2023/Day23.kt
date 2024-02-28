@@ -1,4 +1,4 @@
-package adventofcode.y2023
+package adventofcode.y2023 // ktlint-disable filename
 
 import adventofcode.Coord
 import adventofcode.Edge
@@ -19,9 +19,9 @@ fun main() {
     println("part2=" + findLongestDistance(edges, start, end))
 }
 
-fun edges(c: Coord, grid: Map<Coord, Char>, ends: List<Coord>): List<Edge> = safeAround(c, grid).mapNotNull { edge(it, c, grid, ends) }
+private fun edges(c: Coord, grid: Map<Coord, Char>, ends: List<Coord>): List<Edge> = safeAround(c, grid).mapNotNull { edge(it, c, grid, ends) }
 
-fun edge(first: Coord, start: Coord, grid: Map<Coord, Char>, ends: List<Coord>): Edge? {
+private fun edge(first: Coord, start: Coord, grid: Map<Coord, Char>, ends: List<Coord>): Edge? {
     val seen = mutableListOf(start, first)
     var around = safeAround(first, grid).filter { it !in seen }
     while (around.size < 2 && (seen.isEmpty() || seen.last() !in ends)) {
@@ -33,10 +33,10 @@ fun edge(first: Coord, start: Coord, grid: Map<Coord, Char>, ends: List<Coord>):
     return Edge(start, seen.last(), seen.size - 1)
 }
 
-fun safeAround(c: Coord, grid: Map<Coord, Char>): List<Coord> = c.around().filter { grid.getOrDefault(it, '#') != '#' }
+private fun safeAround(c: Coord, grid: Map<Coord, Char>): List<Coord> = c.around().filter { grid.getOrDefault(it, '#') != '#' }
 
 private val cache = mutableMapOf<Coord, Int?>()
-fun iterate(cur: Coord, end: Coord, grid: Map<Coord, Char>, seen: Set<Coord> = emptySet()): Int? = cache.getOrPut(cur) {
+private fun iterate(cur: Coord, end: Coord, grid: Map<Coord, Char>, seen: Set<Coord> = emptySet()): Int? = cache.getOrPut(cur) {
     if (cur == end) return 0
     val possible = when (grid.getValue(cur)) {
         '.' -> cur.around()

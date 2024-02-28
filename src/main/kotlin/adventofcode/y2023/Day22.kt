@@ -19,7 +19,7 @@ fun main() {
     println("part2=" + unsettled.sum())
 }
 
-fun settle(bricks: List<Brick>): List<Brick> {
+private fun settle(bricks: List<Brick>): List<Brick> {
     val settled = mutableListOf<Brick>()
     bricks.sortedBy { it.z.first }.forEach { b ->
         settled += b.down(b.gap(settled))
@@ -27,7 +27,7 @@ fun settle(bricks: List<Brick>): List<Brick> {
     return settled
 }
 
-fun numUnsettled(bricks: List<Brick>): Int {
+private fun numUnsettled(bricks: List<Brick>): Int {
     var unsettled = 0
     val settled = mutableListOf<Brick>()
     bricks.sortedBy { it.z.first }.forEach { b ->
@@ -37,13 +37,13 @@ fun numUnsettled(bricks: List<Brick>): Int {
     return unsettled
 }
 
-fun toBrick(start: Coord3D, end: Coord3D): Brick = Brick(
+private fun toBrick(start: Coord3D, end: Coord3D): Brick = Brick(
     anyRange(start.x, end.x),
     anyRange(start.y, end.y),
     anyRange(start.z, end.z),
 )
 
-data class Brick(val x: IntRange, val y: IntRange, val z: IntRange) {
+private data class Brick(val x: IntRange, val y: IntRange, val z: IntRange) {
     fun down(i: Int = 1) = copy(z = (z.first - i)..(z.last - i))
 
     fun gap(l: List<Brick>): Int {
@@ -57,4 +57,4 @@ data class Brick(val x: IntRange, val y: IntRange, val z: IntRange) {
     }
 }
 
-fun IntRange.overlaps(b: IntRange) = max(first, b.first) <= min(last, b.last)
+private fun IntRange.overlaps(b: IntRange) = max(first, b.first) <= min(last, b.last)

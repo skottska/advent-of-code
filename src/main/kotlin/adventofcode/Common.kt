@@ -150,6 +150,7 @@ class LinkedNode<T>(val value: T) {
     }
 }
 
+data class Coord3DLong(val x: Long, val y: Long, val z: Long)
 data class Coord3D(val x: Int, val y: Int, val z: Int) {
     fun isAdjacent(c: Coord3D) =
         when {
@@ -306,3 +307,9 @@ fun findShortestPath(edges: List<Edge>, start: Node, end: Node): Int? {
     val shortest = dist[end]
     return if (shortest == Integer.MAX_VALUE) null else shortest
 }
+
+fun <T, S> List<T>.applyToOthers(func: (T, T) -> S): List<S> = mapIndexed { index, t1 ->
+    (index until size).map { t2 ->
+        func(t1, get(t2))
+    }
+}.flatten()
