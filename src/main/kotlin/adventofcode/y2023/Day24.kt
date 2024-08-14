@@ -1,20 +1,22 @@
 package adventofcode.y2023 // ktlint-disable filename
 
-import adventofcode.Coord3DLong
-import adventofcode.anyRange
-import adventofcode.applyToOthers
-import adventofcode.matchNumbersLong
-import adventofcode.readFile
+import adventofcode.*
 import kotlin.math.abs
+import kotlin.math.roundToInt
+import kotlin.system.exitProcess
 
 fun main() {
+    factorsOfNumber(100L).also { println(it) }
     val hailstones = readFile("src/main/resources/y2023/day24.txt").map { line ->
         matchNumbersLong(line).let { Hailstone(Coord3DLong(it[0], it[1], it[2]), Coord3DLong(it[3], it[4], it[5])) }
     }
     val equations = hailstones.map { it to it.xyEquation() }
 
-    val min = 200000000000000
-    val max = 400000000000000
+    val min = 200000000000000L
+    val max = 400000000000000L
+
+    //val min = 7L
+    //val max = 27L
 
     val meets = equations.applyToOthers { e1, e2 ->
         val meet = e1.second.meet(e2.second)
@@ -50,8 +52,34 @@ fun main() {
         }
     }*/
 
+    val incMax = 100L
+    (-incMax..incMax).forEach { xInc ->
+        (-incMax..incMax).forEach { yInc ->
+            (-incMax..incMax).forEach { zInc ->
+                val testAnswer = Coord3DLong(xInc, yInc, zInc)
+                //val testAnswer = Coord3DLong(-3, 1, 2)
+                val adjusted = hailstones.map { it.adjustInc(testAnswer) }
+                val adjustedOthers = adjusted.drop(1)
+                val rr = adjustedOthers.map { adjusted.first().meets(it) }
+                if (rr.none { it == null } && rr.filterNotNull().toSet().size == 1) {
+                    println(rr.filterNotNull().toSet())
+                    exitProcess(0)
+                }
+                /*
+                val moves = adjusted.map { (0..100).map { seconds -> it.move(seconds) } }.flatten().groupBy { it }.filter { it.value.size == adjusted.size }
+                if (moves.isNotEmpty()) {
+                    println("moves="+moves.keys.first())
+                    exitProcess(0)
+                }*/
+            }
+        }
+    }
+
+
+    //part2(hailstones)
+
     val others = hailstones.drop(1)
-    val pos = hailstones.first().move(5)
+    //val pos = hailstones.first().move(5)
 
     // val x = others.fold(true) { total, i -> total && i.validSeconds(pos, 5).isNotEmpty() }
 
@@ -71,27 +99,81 @@ fun main() {
         println(""+it+"=>"+it.intersects(Hailstone(Coord3DLong(24, 13, 10), Coord3DLong(-3, 1, 2))))
     }*/
 
-    (1..1_000_000_000).forEach { seconds ->
-        if (seconds % 100_000 == 0) println("seconds=$seconds")
-        val increments = others.last().calculateIncrements(pos, seconds)
-        increments.forEach {
-            val move = Hailstone(pos, it).move(-seconds)
-            val all = hailstones.all { h ->
-                h.intersects(Hailstone(move, it))
-            }
-            if (all) {
-                println("part2="+Hailstone(move, it))
-                return
-            }
+    val exMinX = hailstones.filter { it.inc.x <= 0 }.minOfOrNull { it.start.x }
+    val exMaxX = hailstones.filter { it.inc.x >= 0 }.maxOfOrNull { it.start.x }
+    val exMinY = hailstones.filter { it.inc.y <= 0 }.minOfOrNull { it.start.y }
+    val exMaxY = hailstones.filter { it.inc.y >= 0 }.maxOfOrNull { it.start.y }
+    val exMinZ = hailstones.filter { it.inc.z <= 0 }.minOfOrNull { it.start.z }
+    val exMaxZ = hailstones.filter { it.inc.z >= 0 }.maxOfOrNull { it.start.z }
+
+    val rangeFunc = { c: Coord3DLong ->
+        when {
+            exMinX != null && exMaxX != null && c.x in exMinX..exMaxX -> false
+            exMinY != null && exMaxY != null && c.y in exMinY..exMaxY -> false
+            exMinZ != null && exMaxZ != null && c.z in exMinZ..exMaxZ -> false
+            else -> true
         }
+    }
+
+    /*
+    println("exclusionMinY="+hailstones.filter { it.inc.y <= 0 }.minOf { it.start.y })
+    println("exclusionMaxY="+hailstones.filter { it.inc.y >= 0 }.maxOf { it.start.y })
+    println("exclusionMinZ="+hailstones.filter { it.inc.z <= 0 }.minOf { it.start.z })
+    println("exclusionMaxZ="+hailstones.filter { it.inc.z >= 0 }.maxOf { it.start.z })*/
+
+   /* var loopTime = System.currentTimeMillis()
+    (0..10_000_000).forEach { firstCollisionSeconds ->
+        if (firstCollisionSeconds % 100_000 == 0) {
+            val newTime = System.currentTimeMillis()
+            println("firstCollisionSeconds=$firstCollisionSeconds time="+(newTime-loopTime))
+            loopTime = newTime
+        }
+        val pos = hailstones.first().move(firstCollisionSeconds)
+       // (1..10_000).forEach { seconds ->
+            val increments = others.last().calculateIncrements(pos, firstCollisionSeconds)
+            increments.forEach {
+                val move = Hailstone(pos, it).move(-firstCollisionSeconds)
+                if (rangeFunc(move)) {
+                    val all = hailstones.all { h ->
+                        h.intersects(Hailstone(move, it))
+                    }
+                    if (all) {
+                        println("part2=" + Hailstone(move, it))
+                        return
+                    }
+                }
+            }
+        //}
+    }*/
+}
+
+
+private fun part2(hailstones: List<Hailstone>) {
+
+    hailstones.forEach { h ->
+        val others = hailstones.filter { it != h }
+        val seconds = 1
+        val pos = h.move(seconds)
+        val movedOthers = others.map { it.moveHailstone(seconds) }
+        val xPossible = possible(pos.x, movedOthers.map { it.start.x to it.inc.x })
+        val yPossible = possible(pos.y, movedOthers.map { it.start.y to it.inc.y })
+        val zPossible = possible(pos.z, movedOthers.map { it.start.z to it.inc.z })
+
+        println("sec="+seconds+" x="+xPossible+" y="+yPossible+" z="+zPossible+ " overall="+(xPossible && yPossible && zPossible ))
     }
 }
 
+private fun possible(pos: Long, others: List<Pair<Long, Long>>): Boolean {
+    val hasHigherAndMovingAway = others.any { it.first > pos && it.second >= 0}
+    val hasLowerAndMovingAway = others.any { it.first < pos && it.second <= 0}
+    return !(hasHigherAndMovingAway && hasLowerAndMovingAway)
+}
+
 private data class Equation(val x: Double, val c: Double) {
-    fun meet(e: Equation): Pair<Double, Double>? = when {
-        x != e.x -> ((e.c - c) / (e.x - x)).let { -it to -it * x + c }
-        else -> null
-    }
+    fun meet(e: Equation): Pair<Double, Double>? =  when {
+            x != e.x -> ((e.c - c) / (e.x - x)).let { -it to -it * x + c }
+            else -> null
+        }
 }
 
 private fun meets(e1: Pair<Hailstone, Equation>, e2: Pair<Hailstone, Equation>): Pair<Double, Double>? {
@@ -104,9 +186,13 @@ private fun meets(e1: Pair<Hailstone, Equation>, e2: Pair<Hailstone, Equation>):
     } // .also { println("meets="+it) }
 }
 
+private val cache = mutableMapOf<Pair<Hailstone, Hailstone>, Boolean>()
+
 private data class Hailstone(val start: Coord3DLong, val inc: Coord3DLong) {
+    fun adjustInc(diff: Coord3DLong) = copy(inc = Coord3DLong(inc.x - diff.x, inc.y - diff.y, inc.z - diff.z))
     fun isFuture(point: Pair<Double, Double>) = point.first > start.x == inc.x > 0 && point.second > start.y == inc.y > 0
     fun move(i: Int) = Coord3DLong(start.x + i * inc.x, start.y + i * inc.y, start.z + i * inc.z)
+    fun moveHailstone(i: Int) = Hailstone(move(i), inc)
     fun validSeconds(other: Coord3DLong, move: Int): Set<Long> {
         val new = move(move)
         println("x=>" + axisMeet(new.x, inc.x, other.x))
@@ -115,7 +201,20 @@ private data class Hailstone(val start: Coord3DLong, val inc: Coord3DLong) {
         return axisMeet(new.x, inc.x, other.x).intersect(axisMeet(new.y, inc.y, other.y)).intersect(axisMeet(new.z, inc.z, other.z)).also { println("res=>" + it) }
     }
 
-    fun intersects(other: Hailstone): Boolean {
+    fun intersects(other: Hailstone): Boolean = cache.getOrPut(this to other) { intersectsInternal(other) }
+
+    fun meets(other: Hailstone): Coord3DLong? {
+        val meetXY = meets(this to xyEquation(), other to other.xyEquation()) ?: return null
+        val meetYZ = meets(this to yzEquation(), other to other.yzEquation()) ?: return null
+        val meetXZ = meets(this to xzEquation(), other to other.xzEquation()) ?: return null
+        val xs = listOf(meetXY.first, meetXZ.first).filter { !it.isNaN() }.toSet()
+        val ys = listOf(meetXY.second, meetYZ.first).filter { !it.isNaN() }.toSet()
+        val zs = listOf(meetXZ.second, meetYZ.second).filter { !it.isNaN() }.toSet()
+        if (xs.size != 1 || ys.size != 1 || zs.size != 1) return null
+        return Coord3DLong(xs.max().toLong(), ys.max().toLong(), zs.max().toLong())
+    }
+
+    private fun intersectsInternal(other: Hailstone): Boolean {
         val meet = meets(this to xyEquation(), other to other.xyEquation()) ?: return false
         if (meet.first.isNaN() || meet.second.isNaN()) return false
 
@@ -130,6 +229,16 @@ private data class Hailstone(val start: Coord3DLong, val inc: Coord3DLong) {
     fun xyEquation(): Equation {
         val gradient = inc.y.toDouble() / inc.x.toDouble()
         return Equation(gradient, gradient * -start.x + start.y)
+    }
+
+    fun yzEquation(): Equation {
+        val gradient = inc.z.toDouble() / inc.y.toDouble()
+        return Equation(gradient, gradient * -start.y + start.z)
+    }
+
+    fun xzEquation(): Equation {
+        val gradient = inc.z.toDouble() / inc.x.toDouble()
+        return Equation(gradient, gradient * -start.x + start.z)
     }
 
     fun calculateIncrements(other: Coord3DLong, move: Int): List<Coord3DLong> {
@@ -182,14 +291,23 @@ private fun axisMeet(axis1: Long, axis1Inc: Long, axis2: Long): Set<Long> {
     }.toSet()
 }
 
+
+private val axisCache = mutableMapOf<Pair<Long, Long>, Set<Pair<Long, Long>>>()
 private fun axisMeet2(axis1: Long, axis1Inc: Long, axis2: Long): Set<Pair<Long, Long>> {
     //if (axis1 == axis2) throw IllegalArgumentException("Can't handle equal positions yet")
-    if (axis1 == axis2) return emptySet()
-    val diff = axis1 - axis2
-    // val max = abs(diff) + abs(axis1Inc)
-    val max = 2_000L
-    return anyRange(max, -max).mapNotNull {
-        val incDiff = it - axis1Inc
-        if (incDiff != 0L && diff % incDiff == 0L) it to diff / incDiff else null
-    }.toSet()
+   return if (axis1 == axis2) emptySet()
+    else {
+        val diff = axis1 - axis2
+        // val max = abs(diff) + abs(axis1Inc)
+        val max = 1_000L
+        /*anyRange(max, -max).mapNotNull {
+            val incDiff = it - axis1Inc
+            if (incDiff != 0L && diff % incDiff == 0L) it to diff / incDiff else null
+        }.toSet().also { println("a1="+axis1+" a1Inc="+axis1Inc+" a2="+axis2+" => "+it) }*/
+
+       val factors = (listOf(1L) + factorsOfNumber(abs(diff))).flatMap { listOf(it, -it) }
+       factors.map { it + axis1Inc to diff / it }.toSet()
+               //.also { println("a1="+axis1+" a1Inc="+axis1Inc+" a2="+axis2+" => "+it) }
+
+    }
 }

@@ -170,10 +170,36 @@ fun primes(max: Int): Set<Int> {
     return primeSet.filter { it <= max }.toSet()
 }
 
-fun divisors(i: Int): List<Int> {
-    if (i == 1) return emptyList()
-    val first = primes(i).first { i % it == 0 }
-    return listOf(first) + divisors(i / first)
+private val primeSetLong = mutableSetOf(2L, 3L, 5L, 7L, 11L, 13L, 17L, 19L)
+fun primes(max: Long): Set<Long> {
+    ((primeSetLong.max() + 1L)..max).forEach { i ->
+        if (primeSetLong.none { i % it == 0L }) {
+            if (primeSetLong.size % 10_000 == 0) println("biggest prime ="+ primeSetLong.max())
+            primeSetLong.add(i)
+        }
+    }
+    return primeSetLong.filter { it <= max }.toSet()
+}
+
+private val primeFactorsCache = mutableMapOf<Long, List<Long>>()
+/*fun primeFactors(i: Long): List<Long> = primeFactorsCache.getOrPut(i) {
+    primes(i).firstOrNull { i % it == 0L }?.let { listOf(it) + primeFactors(i / it) } ?: emptyList()
+}*/
+
+fun primeFactors(i: Long): List<Long> = primeFactorsCache.getOrPut(i) {
+    primes(i).firstOrNull { i % it == 0L }?.let { listOf(it) + primeFactors(i / it) } ?: emptyList()
+}
+
+fun factorsOfNumber(num: Long) : Set<Long> {
+    println("starting="+num)
+    val time = System.currentTimeMillis()
+    if (num < 1) return emptySet()
+    val primes = primeFactors(num)
+    if (num in primes) return setOf(1L, num)
+    return (setOf(1L, num) + primes.flatMap { factorsOfNumber(num / it) }.toSet()).also {
+        val take = System.currentTimeMillis() - time
+        println("fac=$num taken=$take")
+    }
 }
 
 private fun gcd(x: Int, y: Int): Int = if (y == 0) x else gcd(y, x % y)
