@@ -70,6 +70,7 @@ data class Coord(val row: Int, val col: Int) : Node {
     fun around() = listOf(left(), right(), up(), down())
     fun aroundDiag() = around() + listOf(upRight(), upLeft(), downRight(), downLeft())
 }
+
 data class DirectedCoord(val facing: Facing, val coord: Coord) {
     fun left() = copy(facing = facing.left())
     fun right() = copy(facing = facing.right())
