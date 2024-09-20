@@ -175,7 +175,7 @@ private val primeSetLong = mutableSetOf(2L, 3L, 5L, 7L, 11L, 13L, 17L, 19L)
 fun primes(max: Long): Set<Long> {
     ((primeSetLong.max() + 1L)..max).forEach { i ->
         if (primeSetLong.none { i % it == 0L }) {
-            if (primeSetLong.size % 10_000 == 0) println("biggest prime ="+ primeSetLong.max())
+            if (primeSetLong.size % 10_000 == 0) println("biggest prime =" + primeSetLong.max())
             primeSetLong.add(i)
         }
     }
@@ -191,8 +191,8 @@ fun primeFactors(i: Long): List<Long> = primeFactorsCache.getOrPut(i) {
     primes(i).firstOrNull { i % it == 0L }?.let { listOf(it) + primeFactors(i / it) } ?: emptyList()
 }
 
-fun factorsOfNumber(num: Long) : Set<Long> {
-    println("starting="+num)
+fun factorsOfNumber(num: Long): Set<Long> {
+    println("starting=" + num)
     val time = System.currentTimeMillis()
     if (num < 1) return emptySet()
     val primes = primeFactors(num)
@@ -278,7 +278,7 @@ fun lagoonSize(corners: List<Coord>): Long {
         corners.foldIndexed(0L) { i, total, c ->
             val next = corners[(i + 1) % corners.size]
             total + c.col.toLong() * next.row - c.row.toLong() * next.col
-        } / 2,
+        } / 2
     )
     val perimeter = corners.foldIndexed(0L) { i, total, c ->
         val next = corners[(i + 1) % corners.size]
