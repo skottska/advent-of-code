@@ -152,7 +152,11 @@ class LinkedNode<T>(val value: T) {
 }
 
 data class Coord3DLong(val x: Long, val y: Long, val z: Long)
-data class Coord3D(val x: Int, val y: Int, val z: Int) {
+
+interface DiagAdjacentCoord {
+    fun diagAdjacentAndThis(): List<DiagAdjacentCoord>
+}
+data class Coord3D(val x: Int, val y: Int, val z: Int) : DiagAdjacentCoord {
     fun isAdjacent(c: Coord3D) =
         when {
             listOf(x == c.x, y == c.y, z == c.z).filter { it }.size != 2 -> false
@@ -161,6 +165,31 @@ data class Coord3D(val x: Int, val y: Int, val z: Int) {
 
     fun absSumOfCoords() = abs(x) + abs(y) + abs(z)
     fun down() = copy(z = z - 1)
+    override fun diagAdjacentAndThis(): List<Coord3D> = setOf(x - 1, x, x + 1).flatMap { xs ->
+        setOf(y - 1, y, y + 1).flatMap { ys ->
+            setOf(z - 1, z, z + 1).map { zs ->
+                Coord3D(xs, ys, zs)
+            }
+        }
+    }
+}
+
+data class Coord4D(val w: Int, val x: Int, val y: Int, val z: Int) : DiagAdjacentCoord {
+    override fun diagAdjacentAndThis(): List<Coord4D> = setOf(w - 1, w, w + 1).flatMap { ws ->
+        setOf(x - 1, x, x + 1).flatMap { xs ->
+            setOf(y - 1, y, y + 1).flatMap { ys ->
+                setOf(z - 1, z, z + 1).map { zs ->
+                    Coord4D(ws, xs, ys, zs)
+                }
+            }
+        }
+    }
+
+    fun isDiagAdjacent(c: Coord4D) =
+        when (c) {
+            this -> false
+            else -> abs(w - c.w) <= 1 && abs(x - c.x) <= 1 && abs(y - c.y) <= 1 && abs(z - c.z) <= 1
+        }
 }
 
 private val primeSet = mutableSetOf(2, 3, 5, 7, 11, 13, 17, 19)
