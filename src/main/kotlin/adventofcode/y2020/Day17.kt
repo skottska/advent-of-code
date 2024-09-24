@@ -9,7 +9,7 @@ import adventofcode.readFile
 fun main() {
     val active = readFile("src/main/resources/y2020/day17.txt").mapCoord().filter { it.value == '#' }.keys
     println("part1=" + solve(active.map { Coord3D(it.row, it.col, 0) }))
-    println("part1=" + solve(active.map { Coord4D(0, it.row, it.col, 0) }))
+    println("part2=" + solve(active.map { Coord4D(0, it.row, it.col, 0) }))
 }
 
 private fun solve(active: List<DiagAdjacentCoord>): Int {
