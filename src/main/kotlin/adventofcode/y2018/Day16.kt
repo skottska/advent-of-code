@@ -11,6 +11,24 @@ fun main() {
     }
     val funcs = listOf(::addr, ::addi, ::muli, ::mulr, ::banr, ::bani, ::borr, ::bori, ::setr, ::seti, ::gtir, ::gtri, ::gtrr, ::eqir, ::eqri, ::eqrr)
     println("part1=" + samples.count { s -> funcs.count { s.after == it(s) } >= 3 })
+
+    var unmatchedSamples = samples.groupBy { it.opcode.first() }
+    val unmatchedFuncs = funcs.toMutableList()
+    val opcodeFuncs = mutableMapOf<Int, (Sample) -> List<Int>>()
+    while (unmatchedSamples.isNotEmpty()) {
+        unmatchedSamples = unmatchedSamples.filter { s ->
+            val fs = unmatchedFuncs.filter { f -> s.value.any { it.after == f(it) } }
+            if (fs.size == 1) {
+                opcodeFuncs[s.key] = fs.first()
+                unmatchedFuncs.remove(fs.first())
+                false
+            } else true
+        }
+    }
+
+    val instructions = lines.drop(lines.lastIndexOf("") + 1).map { matchNumbers(it) }
+    val part2 = instructions.fold(listOf(0, 0, 0, 0)) { total, inst -> opcodeFuncs.getValue(inst.first())(Sample(total, inst, emptyList())) }
+    println("part2=" + part2.first())
 }
 
 private data class Sample(val before: List<Int>, val opcode: List<Int>, val after: List<Int>)
@@ -24,7 +42,7 @@ private fun bani(s: Sample) = operation(s, Int::and, false)
 private fun borr(s: Sample) = operation(s, Int::or, true)
 private fun bori(s: Sample) = operation(s, Int::or, false)
 private fun setr(s: Sample) = operation(s, { a: Int, _: Int -> a }, true)
-private fun seti(s: Sample) = operation(s, { a: Int, _: Int -> a }, false)
+private fun seti(s: Sample) = operationImRe(s) { a: Int, _: Int -> a }
 
 private fun greaterThan(a: Int, b: Int) = if (a > b) 1 else 0
 private fun gtir(s: Sample) = operationImRe(s, ::greaterThan)
