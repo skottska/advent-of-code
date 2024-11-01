@@ -12,8 +12,8 @@ fun main() {
 private fun part1(line: List<Int>) {
     val cache: MutableMap<Int, LinkedNode<Int>> = mutableMapOf()
     val start = line.map { LinkedNode(it).also { n -> cache[n.value] = n } }.reduce { a, b -> a.addAfter(b); b }.next
-    val result = (1..100).fold(start) { total, _ -> iterate(total, 9, cache) }
-    var curCup = result.find(1).next
+    (1..100).fold(start) { total, _ -> iterate(total, 9, cache) }
+    var curCup = cache.getValue(1).next
     var part1 = ""
     while (curCup.value != 1) {
         part1 += curCup.value.toString()

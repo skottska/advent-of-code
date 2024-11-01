@@ -149,6 +149,11 @@ class LinkedNode<T>(val value: T) {
         prev.next = next
         next.prev = prev
     }
+    fun find(t: T): LinkedNode<T> {
+        var cur = this
+        while (cur.value != t) cur = cur.next
+        return cur
+    }
 }
 
 data class Coord3DLong(val x: Long, val y: Long, val z: Long)
