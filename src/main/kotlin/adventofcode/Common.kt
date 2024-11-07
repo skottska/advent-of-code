@@ -54,6 +54,7 @@ fun mergeRanges(ranges: List<LongRange>) = ranges.sortedBy { it.first }.fold(lis
 fun anyRange(a: Int, b: Int) = min(a, b)..(max(a, b))
 fun anyRange(a: Long, b: Long) = min(a, b)..(max(a, b))
 fun anyRange(a: List<Int>) = a.min()..a.max()
+fun rangeOverlaps(a: IntRange, b: IntRange): Boolean = a.first in b || a.last in b || b.first in a || b.last in a
 
 data class Edge(val node1: Node, val node2: Node, val distance: Int)
 interface Node
