@@ -3,9 +3,10 @@ package adventofcode.y2023 // ktlint-disable filename
 import adventofcode.matchNumbers
 import adventofcode.matchNumbersLong
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2023/day06.txt")
+    val lines = readFile(MethodHandles.lookup())
     val nums1 = lines.map { matchNumbers(it) }
     val races = nums1.first().size
     (0 until races).fold(1) { total, race ->

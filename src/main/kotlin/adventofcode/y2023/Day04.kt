@@ -2,9 +2,10 @@ package adventofcode.y2023 // ktlint-disable filename
 
 import adventofcode.matchNumbers
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val matches = readFile("src/main/resources/y2023/day04.txt").map { line ->
+    val matches = readFile(MethodHandles.lookup()).map { line ->
         val nums = matchNumbers(line)
         val winningNumbers = nums.subList(1, 11)
         val scratchcard = nums.subList(11, nums.size)

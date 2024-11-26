@@ -3,9 +3,10 @@ package adventofcode.y2023 // ktlint-disable filename
 import adventofcode.matchNumbers
 import adventofcode.matches
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val games = readFile("src/main/resources/y2023/day02.txt").map { line ->
+    val games = readFile(MethodHandles.lookup()).map { line ->
         Game(matchNumbers(line).first(), matches(line, "\\d+ [a-z]+").map { it.substring(it.indexOf(' ') + 1) to matchNumbers(it).first() })
     }
     val availableCubes = mapOf("red" to 12, "green" to 13, "blue" to 14)

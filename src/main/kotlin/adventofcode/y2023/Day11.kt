@@ -3,10 +3,11 @@ package adventofcode.y2023 // ktlint-disable filename
 import adventofcode.Coord
 import adventofcode.mapCoord
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 import kotlin.math.abs
 
 fun main() {
-    val lines = readFile("src/main/resources/y2023/day11.txt")
+    val lines = readFile(MethodHandles.lookup())
     val universe = lines.mapCoord()
     val blankRows = lines.indices.filter { i -> lines[i].all { it == '.' } }
     val blankCols = lines.first().toList().indices.filter { col -> lines.map { it[col] }.all { it == '.' } }

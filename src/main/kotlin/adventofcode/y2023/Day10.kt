@@ -4,9 +4,10 @@ import adventofcode.Coord
 import adventofcode.Facing
 import adventofcode.mapCoord
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2023/day10.txt")
+    val lines = readFile(MethodHandles.lookup())
     val grid = lines.mapCoord().toMutableMap()
 
     val start = grid.filter { it.value == 'S' }.keys.first()

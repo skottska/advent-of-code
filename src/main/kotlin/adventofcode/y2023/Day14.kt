@@ -3,9 +3,10 @@ package adventofcode.y2023 // ktlint-disable filename
 import adventofcode.readFile
 import adventofcode.runNTimes
 import adventofcode.transposeStrings
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val grid = readFile("src/main/resources/y2023/day14.txt")
+    val grid = readFile(MethodHandles.lookup())
     println("part1=" + weight(north(grid)))
     println("part2=" + weight(runNTimes(::cycle, grid, 1000000000L)))
 }

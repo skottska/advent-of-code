@@ -2,10 +2,11 @@ package adventofcode.y2023 // ktlint-disable filename
 
 import adventofcode.readFile
 import adventofcode.transposeStrings
+import java.lang.invoke.MethodHandles
 import kotlin.math.min
 
 fun main() {
-    val lines = readFile("src/main/resources/y2023/day13.txt")
+    val lines = readFile(MethodHandles.lookup())
     val blank = listOf(-1) + lines.mapIndexedNotNull { index, i -> if (i.isBlank()) index else null } + lines.size
     val grids = blank.windowed(size = 2).map { lines.subList(it.first() + 1, it.last()) }
 

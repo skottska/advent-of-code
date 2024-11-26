@@ -4,9 +4,10 @@ import adventofcode.Coord
 import adventofcode.mapCoord
 import adventofcode.matchNumbers
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val coords = readFile("src/main/resources/y2023/day03.txt").mapCoord()
+    val coords = readFile(MethodHandles.lookup()).mapCoord()
     val nextToSymbol = coords.filter { c ->
         c.value.isDigit() && c.key.aroundDiag().any { a ->
             val char = coords.getOrDefault(a, '.')

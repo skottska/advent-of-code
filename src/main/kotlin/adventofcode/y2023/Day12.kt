@@ -3,9 +3,10 @@ package adventofcode.y2023 // ktlint-disable filename
 import adventofcode.matchNumbers
 import adventofcode.readFile
 import adventofcode.split
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2023/day12.txt").map { line -> split(line).let { it.first() to matchNumbers(it.last()) } }
+    val lines = readFile(MethodHandles.lookup()).map { line -> split(line).let { it.first() to matchNumbers(it.last()) } }
     println("part1=" + lines.sumOf { iterate(it.first, it.second) })
 
     val lines2 = lines.map { (2..5).fold(it) { total, _ -> total.first + "?" + it.first to total.second + it.second } }

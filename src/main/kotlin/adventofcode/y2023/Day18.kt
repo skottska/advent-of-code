@@ -6,9 +6,10 @@ import adventofcode.lagoonSize
 import adventofcode.matchNumbers
 import adventofcode.readFile
 import adventofcode.split
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2023/day18.txt").map { split(it) }
+    val lines = readFile(MethodHandles.lookup()).map { split(it) }
     println("part1=" + lagoonSize(generateCorners(lines.map { it.first().first() to matchNumbers(it[1]).first() })))
 
     val corners = generateCorners(

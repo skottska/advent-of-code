@@ -5,10 +5,11 @@ import adventofcode.DirectedCoord
 import adventofcode.Facing
 import adventofcode.mapCoord
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 import kotlin.math.min
 
 fun main() {
-    val grid = readFile("src/main/resources/y2023/day17.txt").mapCoord().map { it.key to it.value.digitToInt() }.toMap()
+    val grid = readFile(MethodHandles.lookup()).mapCoord().map { it.key to it.value.digitToInt() }.toMap()
     val start = Coord(0, 0)
     val end = Coord(grid.maxOf { it.key.row }, grid.maxOf { it.key.col })
 

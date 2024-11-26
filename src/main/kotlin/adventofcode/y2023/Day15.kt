@@ -2,9 +2,10 @@ package adventofcode.y2023 // ktlint-disable filename
 
 import adventofcode.matchNumbers
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2023/day15.txt")[0].split(",")
+    val lines = readFile(MethodHandles.lookup())[0].split(",")
     println("part1=" + lines.sumOf { hashify(it) })
 
     val boxes = MutableList<LinkedHashMap<String, Int>>(256) { LinkedHashMap() }

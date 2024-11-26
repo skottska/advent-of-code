@@ -2,9 +2,10 @@ package adventofcode.y2023 // ktlint-disable filename
 
 import adventofcode.matchNumbers
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2023/day01.txt")
+    val lines = readFile(MethodHandles.lookup())
     val nums = lines.sumOf { l -> l.filter { it.isDigit() }.let { matchNumbers(it.first() + "" + it.last()).first() } }
     println("part1=$nums")
     val digits = lines.sumOf { matchNumbers(firstDigit(it, true) + firstDigit(it, false)).first() }

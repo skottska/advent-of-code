@@ -3,9 +3,10 @@ package adventofcode.y2023 // ktlint-disable filename
 import adventofcode.lcm
 import adventofcode.readFile
 import adventofcode.split
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2023/day08.txt")
+    val lines = readFile(MethodHandles.lookup())
     val directions = lines[0].toList()
 
     val paths = (2 until lines.size).associate { i ->

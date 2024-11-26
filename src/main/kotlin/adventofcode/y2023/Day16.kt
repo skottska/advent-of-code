@@ -5,9 +5,10 @@ import adventofcode.DirectedCoord
 import adventofcode.Facing
 import adventofcode.mapCoord
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val grid = readFile("src/main/resources/y2023/day16.txt").mapCoord()
+    val grid = readFile(MethodHandles.lookup()).mapCoord()
     println("part1=" + energise(DirectedCoord(Facing.RIGHT, Coord(0, 0)), grid))
 
     val maxCol = grid.maxOf { it.key.col }

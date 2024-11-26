@@ -2,11 +2,12 @@ package adventofcode.y2023 // ktlint-disable filename
 
 import adventofcode.matchNumbersLong
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 import kotlin.math.max
 import kotlin.math.min
 
 fun main() {
-    val lines = readFile("src/main/resources/y2023/day05.txt")
+    val lines = readFile(MethodHandles.lookup())
     val seeds = matchNumbersLong(lines[0])
     println("part1=" + minConversion(lines, seeds.map { it..it }))
     println("part2=" + minConversion(lines, seeds.windowed(size = 2, step = 2) { it.first()..it.first() + it.last() }))
