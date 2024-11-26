@@ -2,9 +2,10 @@ package adventofcode.y2020 // ktlint-disable filename
 
 import adventofcode.LinkedNode
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val line = readFile("src/main/resources/y2020/day23.txt").first().map { it.digitToInt() }
+    val line = readFile(MethodHandles.lookup()).first().map { it.digitToInt() }
     part1(line)
     part2(line)
 }

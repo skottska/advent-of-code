@@ -4,10 +4,11 @@ import adventofcode.Coord
 import adventofcode.Facing
 import adventofcode.matchNumbers
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 import kotlin.math.abs
 
 fun main() {
-    val directions = readFile("src/main/resources/y2020/day12.txt").map { it.first() to matchNumbers(it.drop(1)).first() }
+    val directions = readFile(MethodHandles.lookup()).map { it.first() to matchNumbers(it.drop(1)).first() }
     part1(directions)
     part2(directions)
 }

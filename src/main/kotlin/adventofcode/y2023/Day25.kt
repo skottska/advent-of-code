@@ -2,14 +2,15 @@ package adventofcode.y2023 // ktlint-disable filename
 
 import adventofcode.readFile
 import adventofcode.split
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val connections = readFile("src/main/resources/y2023/day25.txt").flatMap { line ->
+    val connections = readFile(MethodHandles.lookup()).flatMap { line ->
         val split = split(line)
         split.drop(1).map { split[0].dropLast(1) to it }
     }
 
-    val connections2 = readFile("src/main/resources/y2023/day25.txt").flatMap { line ->
+    val connections2 = readFile(MethodHandles.lookup()).flatMap { line ->
         val split = split(line)
         split.drop(1).map { split[0].dropLast(1) to it }.flatMap { listOf(it, it.second to it.first) }
     }.groupBy { it.first }.map { it.key to it.value.map { a -> a.second } }.toMap()

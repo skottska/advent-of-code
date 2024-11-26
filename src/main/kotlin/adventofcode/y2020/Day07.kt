@@ -2,9 +2,10 @@ package adventofcode.y2020 // ktlint-disable filename
 
 import adventofcode.readFile
 import adventofcode.split
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2020/day07.txt")
+    val lines = readFile(MethodHandles.lookup())
     val bags = lines.associate { line ->
         val split = split(line)
         val name = split[0] + " " + split[1]

@@ -1,9 +1,10 @@
 package adventofcode.y2020 // ktlint-disable filename
 
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2020/day06.txt")
+    val lines = readFile(MethodHandles.lookup())
     val groups = mutableListOf<List<String>>(emptyList())
     lines.forEach { line ->
         if (line.isEmpty()) groups.add(emptyList())

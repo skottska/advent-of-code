@@ -4,11 +4,12 @@ import adventofcode.Coord3D
 import adventofcode.anyRange
 import adventofcode.matchNumbers
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 import kotlin.math.max
 import kotlin.math.min
 
 fun main() {
-    val bricks = readFile("src/main/resources/y2023/day22.txt").map { line ->
+    val bricks = readFile(MethodHandles.lookup()).map { line ->
         val nums = matchNumbers(line)
         toBrick(Coord3D(nums[0], nums[1], nums[2]), Coord3D(nums[3], nums[4], nums[5]))
     }

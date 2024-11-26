@@ -3,11 +3,12 @@ package adventofcode.y2023 // ktlint-disable filename
 import adventofcode.matchNumber
 import adventofcode.readFile
 import adventofcode.split
+import java.lang.invoke.MethodHandles
 import kotlin.math.max
 import kotlin.math.min
 
 fun main() {
-    val lines = readFile("src/main/resources/y2023/day19.txt")
+    val lines = readFile(MethodHandles.lookup())
     val workflows = lines.filter { it.isNotEmpty() && it[0].isLetter() }.associate { line ->
         val name = line.substring(0 until line.indexOf('{'))
         val instructions = line.substring(line.indexOf('{')).drop(1).dropLast(1).split(",").map {

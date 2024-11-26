@@ -5,9 +5,10 @@ import adventofcode.Edge
 import adventofcode.findLongestDistance
 import adventofcode.mapCoord
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val file = readFile("src/main/resources/y2023/day23.txt")
+    val file = readFile(MethodHandles.lookup())
     val grid = file.mapCoord()
 
     val start = Coord(0, file[0].indexOf('.'))

@@ -1,6 +1,8 @@
 package adventofcode
 
 import java.io.File
+import java.lang.invoke.MethodHandles
+import java.lang.invoke.MethodHandles.Lookup
 import java.math.BigInteger
 import java.security.MessageDigest
 import kotlin.math.abs
@@ -8,6 +10,11 @@ import kotlin.math.max
 import kotlin.math.min
 
 fun readFile(fileName: String): List<String> = File(fileName).useLines { it.toList() }
+fun readFile(l: Lookup): List<String> = l.lookupClass().let {
+    val day = it.name.dropLast(2).takeLast(5).lowercase()
+    val year = it.packageName.takeLast(4)
+    return readFile("src/main/resources/y$year/$day.txt")
+}
 
 fun split(line: String) = line.trim().split("\\s+".toRegex())
 

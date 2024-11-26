@@ -2,9 +2,10 @@ package adventofcode.y2020 // ktlint-disable filename
 
 import adventofcode.matchNumbers
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val numbers = matchNumbers(readFile("src/main/resources/y2020/day15.txt").first())
+    val numbers = matchNumbers(readFile(MethodHandles.lookup()).first())
     println("part1=" + iterate(numbers, stop = 2020))
     println("part2=" + iterate(numbers, stop = 30_000_000))
 }

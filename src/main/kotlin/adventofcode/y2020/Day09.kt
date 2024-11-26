@@ -2,9 +2,10 @@ package adventofcode.y2020 // ktlint-disable filename
 
 import adventofcode.firstIndexed
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2020/day09.txt").map { it.toLong() }
+    val lines = readFile(MethodHandles.lookup()).map { it.toLong() }
     val part1 = lines.windowed(size = 26, step = 1).first { additionMissing(it.dropLast(1), it.last()) }.last()
     println("part1=$part1")
 

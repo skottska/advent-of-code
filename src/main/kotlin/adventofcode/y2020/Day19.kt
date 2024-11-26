@@ -2,9 +2,10 @@ package adventofcode.y2020 // ktlint-disable filename
 
 import adventofcode.matchNumbers
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2020/day19.txt")
+    val lines = readFile(MethodHandles.lookup())
 
     val configPre = lines.subList(0, lines.indexOfFirst { it.isEmpty() }).map { line ->
         val split = line.split(':')

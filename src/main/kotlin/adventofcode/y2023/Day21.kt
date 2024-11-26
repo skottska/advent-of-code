@@ -3,9 +3,10 @@ package adventofcode.y2023 // ktlint-disable filename
 import adventofcode.Coord
 import adventofcode.mapCoord
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2023/day21.txt")
+    val lines = readFile(MethodHandles.lookup())
     val grid = lines.mapCoord()
 
     val start = grid.filter { it.value == 'S' }.keys.first()

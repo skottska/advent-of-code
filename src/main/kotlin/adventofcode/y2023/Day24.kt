@@ -1,13 +1,14 @@
 package adventofcode.y2023 // ktlint-disable filename
 
 import adventofcode.*
+import java.lang.invoke.MethodHandles
 import kotlin.math.abs
 import kotlin.math.roundToInt
 import kotlin.system.exitProcess
 
 fun main() {
     factorsOfNumber(100L).also { println(it) }
-    val hailstones = readFile("src/main/resources/y2023/day24.txt").map { line ->
+    val hailstones = readFile(MethodHandles.lookup()).map { line ->
         matchNumbersLong(line).let { Hailstone(Coord3DLong(it[0], it[1], it[2]), Coord3DLong(it[3], it[4], it[5])) }
     }
     val equations = hailstones.map { it to it.xyEquation() }

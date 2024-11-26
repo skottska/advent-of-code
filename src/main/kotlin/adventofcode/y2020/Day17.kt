@@ -5,9 +5,10 @@ import adventofcode.Coord4D
 import adventofcode.DiagAdjacentCoord
 import adventofcode.mapCoord
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val active = readFile("src/main/resources/y2020/day17.txt").mapCoord().filter { it.value == '#' }.keys
+    val active = readFile(MethodHandles.lookup()).mapCoord().filter { it.value == '#' }.keys
     println("part1=" + solve(active.map { Coord3D(it.row, it.col, 0) }))
     println("part2=" + solve(active.map { Coord4D(0, it.row, it.col, 0) }))
 }

@@ -1,9 +1,10 @@
 package adventofcode.y2020 // ktlint-disable filename
 
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2020/day05.txt")
+    val lines = readFile(MethodHandles.lookup())
     val seats = lines.map { findRow(it) to findCol(it) }
     println("part1=" + seats.map { it.first * 8 + it.second }.max())
     val myRow = seats.groupBy { it.first }.map { seat -> seat.key to seat.value.map { it.second } }.filter { it.second.size != 8 }[1]

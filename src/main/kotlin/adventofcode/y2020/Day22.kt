@@ -2,9 +2,10 @@ package adventofcode.y2020 // ktlint-disable filename
 
 import adventofcode.matchNumbers
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2020/day22.txt")
+    val lines = readFile(MethodHandles.lookup())
     val player1 = lines.subList(1, lines.indexOf("")).flatMap { matchNumbers(it) }
     val player2 = lines.drop(lines.indexOf("") + 2).flatMap { matchNumbers(it) }
     iterate(player1, player2, true)

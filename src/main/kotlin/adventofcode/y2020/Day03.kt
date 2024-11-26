@@ -2,6 +2,7 @@ package adventofcode.y2020 // ktlint-disable filename
 
 import adventofcode.Coord
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
     println("part1=" + slope(right = 3, down = 1))
@@ -9,7 +10,7 @@ fun main() {
 }
 
 private fun slope(right: Int, down: Int): Long {
-    val lines = readFile("src/main/resources/y2020/day03.txt").mapIndexed { rowIndex, row ->
+    val lines = readFile(MethodHandles.lookup()).mapIndexed { rowIndex, row ->
         row.mapIndexed { colIndex, col ->
             Coord(rowIndex, colIndex) to (col == '#')
         }

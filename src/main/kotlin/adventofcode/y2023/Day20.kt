@@ -1,9 +1,10 @@
 package adventofcode.y2023 // ktlint-disable filename
 
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2023/day20.txt").map { line ->
+    val lines = readFile(MethodHandles.lookup()).map { line ->
         line.substring(0, line.indexOf(' ')) to line.substring(line.indexOf('>') + 2).split(",").map { it.trim() }
     }
     val modules = lines.associate { line ->

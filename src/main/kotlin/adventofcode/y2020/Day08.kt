@@ -2,9 +2,10 @@ package adventofcode.y2020 // ktlint-disable filename
 
 import adventofcode.readFile
 import adventofcode.split
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2020/day08.txt")
+    val lines = readFile(MethodHandles.lookup())
     println("part1=" + runProgram(lines).second)
     val results = lines.mapIndexedNotNull { index, i ->
         if (i.startsWith("acc")) null

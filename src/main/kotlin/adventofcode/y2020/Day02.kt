@@ -3,9 +3,10 @@ package adventofcode.y2020 // ktlint-disable filename
 import adventofcode.matchPositiveNumbers
 import adventofcode.readFile
 import adventofcode.split
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2020/day02.txt")
+    val lines = readFile(MethodHandles.lookup())
     println(
         "part1=" + lines.count { line ->
             val split = split(line)

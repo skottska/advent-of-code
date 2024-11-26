@@ -5,9 +5,10 @@ import adventofcode.matches
 import adventofcode.readFile
 import adventofcode.split
 import adventofcode.transpose
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2020/day16.txt")
+    val lines = readFile(MethodHandles.lookup())
     val first = lines.indexOfFirst { it.isEmpty() }
     val last = lines.indexOfLast { it.isEmpty() }
 

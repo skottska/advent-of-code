@@ -3,9 +3,10 @@ package adventofcode.y2020 // ktlint-disable filename
 import adventofcode.Coord
 import adventofcode.mapCoord
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val grid = readFile("src/main/resources/y2020/day11.txt").mapCoord()
+    val grid = readFile(MethodHandles.lookup()).mapCoord()
     println("part1=" + iterate(::switchSeatsPart1, grid))
     println("part2=" + iterate(::switchSeatsPart2, grid))
 }

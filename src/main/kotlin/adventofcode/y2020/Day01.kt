@@ -1,9 +1,10 @@
 package adventofcode.y2020 // ktlint-disable filename
 
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2020/day01.txt").map { it.toLong() }
+    val lines = readFile(MethodHandles.lookup()).map { it.toLong() }
     println("part1=" + sumEquals(2020, 2, lines)?.let { it.first() * it.last() })
     println("part2=" + sumEquals(2020, 3, lines)?.let { it[0] * it[1] * it[2] })
 }

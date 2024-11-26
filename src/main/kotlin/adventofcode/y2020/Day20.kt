@@ -6,10 +6,11 @@ import adventofcode.concat
 import adventofcode.matchNumbers
 import adventofcode.readFile
 import adventofcode.transposeStrings
+import java.lang.invoke.MethodHandles
 import kotlin.math.sqrt
 
 fun main() {
-    val tiles = readFile("src/main/resources/y2020/day20.txt").windowed(size = 12, step = 12, partialWindows = true).map {
+    val tiles = readFile(MethodHandles.lookup()).windowed(size = 12, step = 12, partialWindows = true).map {
         Tile(id = matchNumbers(it.first()).first(), lines = it.subList(1, 11))
     }
 

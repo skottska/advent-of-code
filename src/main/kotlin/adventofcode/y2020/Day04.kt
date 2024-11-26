@@ -2,9 +2,10 @@ package adventofcode.y2020 // ktlint-disable filename
 
 import adventofcode.matchNumbers
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2020/day04.txt").fold(listOf("")) { total, i ->
+    val lines = readFile(MethodHandles.lookup()).fold(listOf("")) { total, i ->
         if (i.isEmpty()) total + listOf("") else total.last().let { total.dropLast(1) + listOf("$it $i") }
     }
     val validFields = mapOf<String, (String) -> Boolean>(

@@ -3,10 +3,11 @@ package adventofcode.y2020 // ktlint-disable filename
 import adventofcode.asString
 import adventofcode.matchNumbersLong
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 import java.math.BigInteger
 
 fun main() {
-    val lines = readFile("src/main/resources/y2020/day14.txt")
+    val lines = readFile(MethodHandles.lookup())
     println("part1="+ iterate(lines, isPart1 = true))
     println("part2="+ iterate(lines, isPart1 = false))
 }

@@ -1,10 +1,11 @@
 package adventofcode.y2020 // ktlint-disable filename
 
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 import kotlin.math.min
 
 fun main() {
-    val directions = readFile("src/main/resources/y2020/day24.txt").map { parseDirection(it) }
+    val directions = readFile(MethodHandles.lookup()).map { parseDirection(it) }
 
     val groupedDirections = directions.map { d -> d.groupBy { it }.mapValues { it.value.size } }.map { reduce(it) }
     val part1 = groupedDirections.filter { g -> groupedDirections.count { it == g } % 2 != 0 }.toSet()

@@ -2,9 +2,10 @@ package adventofcode.y2020 // ktlint-disable filename
 
 import adventofcode.matches
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val foods = readFile("src/main/resources/y2020/day21.txt").map { line ->
+    val foods = readFile(MethodHandles.lookup()).map { line ->
         val bracket = line.indexOf('(')
         val ingredients = line.substring(0 until bracket - 1).split(" ")
         val allergens = matches(line.substring(bracket), "[a-z]+").filter { it != "contains" }

@@ -1,9 +1,10 @@
 package adventofcode.y2020 // ktlint-disable filename
 
 import adventofcode.readFile
+import java.lang.invoke.MethodHandles
 
 fun main() {
-    val lines = readFile("src/main/resources/y2020/day18.txt")
+    val lines = readFile(MethodHandles.lookup())
     println("part1=" + lines.sumOf { iteratePart1(it).first })
     println("part2=" + lines.sumOf { solve(iteratePart2(it).first.nodes).num })
 }
