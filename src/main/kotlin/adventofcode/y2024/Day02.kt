@@ -10,11 +10,5 @@ fun main() {
     println("part2=" + lines.count { part2(it) })
 }
 
-private fun part1(l: List<Int>): Boolean {
-    l.windowed(size = 2, step = 1, partialWindows = false).forEach {
-        if (it.last() - it.first() !in listOf(1, 2, 3)) return false
-    }
-    return true
-}
-
-private fun part2(l: List<Int>): Boolean = l.indices.any { part1(l.filterIndexed { index, _ -> index != it }) }
+private fun part1(l: List<Int>) = l.zipWithNext { a, b -> (b - a) in 1..3 }.all { it }
+private fun part2(l: List<Int>) = l.indices.any { part1(l.filterIndexed { index, _ -> index != it }) }
