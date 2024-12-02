@@ -11,4 +11,4 @@ fun main() {
 }
 
 private fun part1(l: List<Int>) = l.zipWithNext { a, b -> (b - a) in 1..3 }.all { it }
-private fun part2(l: List<Int>) = l.indices.any { part1(l.filterIndexed { index, _ -> index != it }) }
+private fun part2(l: List<Int>) = l.indices.any { part1(l.filterIndexed { i, _ -> i != it }) }
