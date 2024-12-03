@@ -11,13 +11,13 @@ fun main() {
     val lines = readFile(MethodHandles.lookup())
     println("part1=" + sumMult(lines))
 
-    var enabled = true
+    var active = true
     val activeLines = mutableListOf<String>()
     lines.concat().split(")").forEach {
         val line = "$it)"
-        if (line.endsWith("do()")) enabled = true
-        if (line.endsWith("don't()")) enabled = false
-        if (matches(line, regex).isNotEmpty() && enabled) activeLines += line
+        if (line.endsWith("do()")) active = true
+        if (line.endsWith("don't()")) active = false
+        if (matches(line, regex).isNotEmpty() && active) activeLines += line
     }
     println("part2=" + sumMult(activeLines))
 }
