@@ -30,6 +30,7 @@ fun matchNumbers(line: String) = matches(line, NUMBER_REGEX).map { it.toInt() }
 fun matchNumbersToBigInt(line: String) = matches(line, NUMBER_REGEX).map { it.toBigInteger() }
 fun matchPositiveNumbers(line: String) = matches(line, "[0-9]+").map { it.toInt() }
 fun matchNumbersLong(line: String) = matches(line, NUMBER_REGEX).map { it.toLong() }
+fun List<Int>.product(): Long = fold(1L) { total, next -> total * next }
 
 fun md5(input: String) = BigInteger(1, MessageDigest.getInstance("MD5").digest(input.toByteArray()))
     .toString(16)
