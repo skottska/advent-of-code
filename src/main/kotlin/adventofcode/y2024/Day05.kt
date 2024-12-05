@@ -21,4 +21,4 @@ fun main() {
     println("part2="+part2.sumOf { it[it.size / 2] })
 }
 
-private fun before(a: Int, l: List<Int>, order: List<Pair<Int, Int>>) = l.all { b -> order.find { it.first == b && it.second == a } == null }
+private fun before(a: Int, l: List<Int>, order: List<Pair<Int, Int>>) = l.all { b -> order.none { it.first == b && it.second == a } }
