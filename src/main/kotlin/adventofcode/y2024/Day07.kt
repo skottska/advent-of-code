@@ -6,9 +6,8 @@ import java.lang.invoke.MethodHandles
 
 fun main() {
     val lines = readFile(MethodHandles.lookup()).map { matchNumbersLong(it) }.map { it.first() to it.drop(1) }
-    println("part1="+lines.filter { solve(it.first, it.second, false) }.sumOf { it.first })
-    println("part2="+lines.filter { solve(it.first, it.second, true) }.sumOf { it.first })
-
+    println("part1=" + lines.filter { solve(it.first, it.second, false) }.sumOf { it.first })
+    println("part2=" + lines.filter { solve(it.first, it.second, true) }.sumOf { it.first })
 }
 
 private fun solve(a: Long, b: List<Long>, join: Boolean): Boolean {
