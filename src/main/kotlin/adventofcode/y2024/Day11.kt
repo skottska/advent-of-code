@@ -6,19 +6,17 @@ import java.lang.invoke.MethodHandles
 
 fun main() {
     val line = matchNumbersLong(readFile(MethodHandles.lookup()).first())
-    println("part1=" + line.sumOf { part2(it, 25) })
-    println("part2=" + line.sumOf { part2(it, 75) })
+    println("part1=" + line.sumOf { iterate(it, 25) })
+    println("part2=" + line.sumOf { iterate(it, 75) })
 }
 
-val cache = mutableMapOf<Pair<Long, Int>, Long>()
-
-private fun part2(l: Long, times: Int): Long {
-    if (times == 0) return 1
-    cache[l to times]?.let { return it }
-    return iterate(l).sumOf { part2(it, times - 1) }.also { cache[l to times] = it }
+private val cache = mutableMapOf<Pair<Long, Int>, Long>()
+private fun iterate(l: Long, times: Int): Long = cache.getOrPut(l to times) {
+    if (times == 0) 1
+    else transform(l).sumOf { iterate(it, times - 1) }
 }
 
-private fun iterate(l: Long): List<Long> = when {
+private fun transform(l: Long): List<Long> = when {
     l == 0L -> listOf(1L)
     l.toString().length % 2 == 0 -> {
         val s = l.toString()
