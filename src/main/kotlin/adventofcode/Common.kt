@@ -142,7 +142,7 @@ fun List<Char>.asString() = fold("") { total, i -> total + i }
 fun List<String>.concat() = fold("") { total, i -> total + i }
 fun String.sort() = String(toCharArray().apply { sort() })
 
-class LinkedNode<T>(val value: T) {
+class LinkedNode<T>(var value: T) {
     var prev: LinkedNode<T> = this
     var next: LinkedNode<T> = this
 
@@ -162,6 +162,15 @@ class LinkedNode<T>(val value: T) {
         var cur = this
         while (cur.value != t) cur = cur.next
         return cur
+    }
+    fun size(): Long {
+        var count = 1L
+        var n = next
+        while(n != this) {
+            count++
+            n = n.next
+        }
+        return count
     }
 }
 
