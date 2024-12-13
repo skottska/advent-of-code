@@ -1,5 +1,6 @@
 package adventofcode.y2024 // ktlint-disable filename
 
+import adventofcode.Equation
 import adventofcode.matchNumbersLong
 import adventofcode.readFile
 import java.lang.invoke.MethodHandles
@@ -16,14 +17,8 @@ private data class Claw(val buttons: List<Pair<Long, Long>>, val dest: Pair<Long
     fun toPart2(inc: Long) = copy(dest = (dest.first + inc) to (dest.second + inc))
 
     fun minClaw(): Long? {
-        val leftDivisor = buttons.first().first * 3
-        val rightDivisor = buttons.first().second * 3
-        val numB = (-buttons.last().first * rightDivisor) + (buttons.last().second * leftDivisor)
-        val value = (dest.second * leftDivisor) - (dest.first *  rightDivisor)
-        val b = wholeDivisor(value, numB) ?: return null
-        val a = wholeDivisor(dest.first - b * buttons.last().first, buttons.first().first) ?: return null
-        return (a * 3) + b
+        val eq1 = Equation(buttons.first().first, buttons.last().first, dest.first)
+        val eq2 = Equation(buttons.first().second, buttons.last().second, dest.second)
+        return eq1.solveWhole(eq2)?.let { (a, b) -> (a * 3) + b }
     }
 }
-
-private fun wholeDivisor(a: Long, b: Long): Long? = if (a % b == 0L) a / b else null

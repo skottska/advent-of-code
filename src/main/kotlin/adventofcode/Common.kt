@@ -1,7 +1,6 @@
 package adventofcode
 
 import java.io.File
-import java.lang.invoke.MethodHandles
 import java.lang.invoke.MethodHandles.Lookup
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -394,3 +393,17 @@ fun <T, S> List<T>.applyToOthers(func: (T, T) -> S): List<S> = mapIndexed { inde
         func(t1, get(t2))
     }
 }.flatten()
+
+// For xa + yb = value
+data class Equation(val numA: Long, val numB: Long, val value: Long) {
+    // Linear algebra. Whole numbers only
+    fun solveWhole(eq2: Equation): Pair<Long, Long>? {
+        val resNumB = (-numB * eq2.numA) + (eq2.numB * numA)
+        val resValue = (eq2.value * numA) - (value *  eq2.numA)
+        val b = wholeDivisor(resValue, resNumB) ?: return null
+        val a = wholeDivisor(value - (b * numB), numA) ?: return null
+        return (a to b)
+    }
+}
+
+fun wholeDivisor(a: Long, b: Long): Long? = if (a % b == 0L) a / b else null
