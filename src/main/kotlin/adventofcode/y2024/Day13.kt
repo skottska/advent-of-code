@@ -20,10 +20,10 @@ private data class Claw(val buttons: List<Pair<Long, Long>>, val dest: Pair<Long
         val rightDivisor = buttons.first().second * 3
         val numB = (-buttons.last().first * rightDivisor) + (buttons.last().second * leftDivisor)
         val value = (dest.second * leftDivisor) - (dest.first *  rightDivisor)
-        val b = divisor(value, numB) ?: return null
-        val a = divisor(dest.first - b * buttons.last().first, buttons.first().first) ?: return null
+        val b = wholeDivisor(value, numB) ?: return null
+        val a = wholeDivisor(dest.first - b * buttons.last().first, buttons.first().first) ?: return null
         return (a * 3) + b
     }
 }
 
-private fun divisor(a: Long, b: Long): Long? = if ( a % b == 0L) a / b else null
+private fun wholeDivisor(a: Long, b: Long): Long? = if (a % b == 0L) a / b else null
