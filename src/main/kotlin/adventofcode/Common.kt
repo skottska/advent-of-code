@@ -126,6 +126,8 @@ fun printCoords(cs: Collection<Coord>, printFunc: (c: Coord) -> String) {
 }
 fun List<String>.mapCoord() = mapIndexed { row, line -> line.mapIndexed { col, c -> Coord(row, col) to c } }.flatten().toMap()
 
+fun power(num: Int, power: Int): Long = if (power == 0) 1 else (2..power).fold(num.toLong()) { acc, _ -> acc * num }
+fun power(num: Long, power: Long): Long = if (power == 0L) 1 else (2..power).fold(num) { acc, _ -> acc * num }
 fun <T> transpose(l: List<List<T>>) = (0 until l.first().size).map { colIndex -> l.map { it[colIndex] } }
 fun transposeStrings(l: List<String>) = (0 until l.first().length).map { colIndex -> l.map { it[colIndex] } }.map { it.asString() }
 fun <T> rotate(l: List<List<T>>) = transpose(l).map { it.reversed() }
