@@ -13,7 +13,7 @@ fun main() {
     val b = matchNumbersLong(lines[1]).first()
     val c = matchNumbersLong(lines[2]).first()
     val program = matchNumbers(lines[4])
-    println("part1="+ iterate(a, b, c, program).map { "$it," }.concat().dropLast(1))
+    println("part1=" + iterate(a, b, c, program).map { "$it," }.concat().dropLast(1))
 
     var cur = 0L
     program.reversed().forEach { p ->
@@ -21,7 +21,7 @@ fun main() {
         while (result != program.takeLast(result.size)) result = iterate(++cur, b, c, program)
         cur *= 8
     }
-    println("part2="+(cur/8))
+    println("part2=" + (cur / 8))
 }
 
 private fun iterate(aIn: Long, bIn: Long, cIn: Long, program: List<Int>): List<Int> {
