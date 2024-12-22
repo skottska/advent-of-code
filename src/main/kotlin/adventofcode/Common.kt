@@ -78,6 +78,13 @@ data class Coord(val row: Int, val col: Int) : Node {
     fun around() = listOf(left(), right(), up(), down())
     fun aroundDiag() = around() + listOf(upRight(), upLeft(), downRight(), downLeft())
 }
+fun charToDirection(c: Char) = when (c) {
+    '^' -> Coord::up
+    'v' -> Coord::down
+    '>' -> Coord::right
+    '<' -> Coord::left
+    else -> throw IllegalArgumentException("Unknown direction: $c")
+}
 
 data class DirectedCoord(val facing: Facing, val coord: Coord) {
     fun left() = copy(facing = facing.left())
