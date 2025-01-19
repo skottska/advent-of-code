@@ -184,6 +184,7 @@ class LinkedNode<T>(var value: T) {
 
 fun String.hexToBinary(): String = BigInteger(this, 16).toString(2)
 fun String.binaryToInt(): String = BigInteger(this, 2).toString(10)
+fun String.intToBinary(): String = BigInteger(this, 10).toString(2)
 data class Coord3DLong(val x: Long, val y: Long, val z: Long)
 
 interface DiagAdjacentCoord {
