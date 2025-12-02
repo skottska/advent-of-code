@@ -25,6 +25,6 @@ private fun patternRepeats(match: Long, range: IntRange): Boolean {
     if (s.length == 1) return false
     return range.any { subLength ->
         val sub = s.substring(0, subLength)
-        s.length % subLength == 0 && (1 until (s.length / subLength)).all { s.substring(it * subLength, (it + 1) * subLength) == sub }
+        s.length % subLength == 0 && s.chunked(subLength).all { it == sub }
     }
 }
