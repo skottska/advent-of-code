@@ -9,22 +9,20 @@ fun main() {
 
     val part1 = ranges.flatMap { r ->
         r.filter {
-            val length = it.toString().length
-            val subLength = if (length % 2 == 0) length / 2 else length / 2 + 1
-            patternRepeats(it, subLength..subLength)
+            val s = it.toString()
+            s.length % 2 == 0 && s.take(s.length / 2) == s.takeLast(s.length / 2)
         }
     }.sum()
     println("part1=$part1")
 
-    val part2 = ranges.flatMap { r -> r.filter { patternRepeats(it, 1..it.toString().length / 2) } }.sum()
+    val part2 = ranges.flatMap { r ->
+        r.filter { match ->
+            val s = match.toString()
+            (1..s.length / 2).any { subLength ->
+                val sub = s.substring(0, subLength)
+                s.length % subLength == 0 && s.chunked(subLength).all { it == sub }
+            }
+        }
+    }.sum()
     println("part2=$part2")
-}
-
-private fun patternRepeats(match: Long, range: IntRange): Boolean {
-    val s = match.toString()
-    if (s.length == 1) return false
-    return range.any { subLength ->
-        val sub = s.substring(0, subLength)
-        s.length % subLength == 0 && s.chunked(subLength).all { it == sub }
-    }
 }
