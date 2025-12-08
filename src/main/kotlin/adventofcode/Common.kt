@@ -7,6 +7,7 @@ import java.security.MessageDigest
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.sqrt
 
 fun readFile(fileName: String): List<String> = File(fileName).useLines { it.toList() }
 fun readFile(l: Lookup): List<String> = l.lookupClass().let {
@@ -206,7 +207,11 @@ data class Coord3D(val x: Int, val y: Int, val z: Int) : DiagAdjacentCoord {
             }
         }
     }
+    fun distance(o: Coord3D) = abs(x - o.x) + abs(y - o.y) + abs(z - o.z)
+    fun distanceEuclidean(o: Coord3D) = sqrt(square(x - o.x) + square(y - o.y) + square(z - o.z).toDouble())
 }
+
+fun square(x: Int): Long = x.toLong() * x.toLong()
 
 data class Coord4D(val w: Int, val x: Int, val y: Int, val z: Int) : DiagAdjacentCoord {
     override fun diagAdjacentAndThis(): List<Coord4D> = setOf(w - 1, w, w + 1).flatMap { ws ->

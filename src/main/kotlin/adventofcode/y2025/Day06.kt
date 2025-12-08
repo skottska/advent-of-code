@@ -26,7 +26,7 @@ fun main() {
                 cur.clear()
             }
             '*' -> {
-                part2 += cur.fold(1L) { a, b -> a * b }
+                part2 += cur.reduce { a, b -> a * b }
                 cur.clear()
             }
         }
