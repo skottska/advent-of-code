@@ -175,7 +175,7 @@ class LinkedNode<T>(var value: T) {
     fun size(): Long {
         var count = 1L
         var n = next
-        while(n != this) {
+        while (n != this) {
             count++
             n = n.next
         }
@@ -211,6 +211,7 @@ data class Coord3D(val x: Int, val y: Int, val z: Int) : DiagAdjacentCoord {
     fun distanceEuclidean(o: Coord3D) = sqrt(square(x - o.x) + square(y - o.y) + square(z - o.z).toDouble())
 }
 
+fun <T, R> List<T>.mapWithOthers(transform: (T, T) -> R): List<R> = indices.flatMap { a -> ((a + 1) until size).map { b -> transform(this[a], this[b]) } }
 fun square(x: Int): Long = x.toLong() * x.toLong()
 
 data class Coord4D(val w: Int, val x: Int, val y: Int, val z: Int) : DiagAdjacentCoord {
@@ -414,7 +415,7 @@ data class Equation(val numA: Long, val numB: Long, val value: Long) {
     // Linear algebra. Whole numbers only
     fun solveWhole(eq2: Equation): Pair<Long, Long>? {
         val resNumB = (-numB * eq2.numA) + (eq2.numB * numA)
-        val resValue = (eq2.value * numA) - (value *  eq2.numA)
+        val resValue = (eq2.value * numA) - (value * eq2.numA)
         val b = wholeDivisor(resValue, resNumB) ?: return null
         val a = wholeDivisor(value - (b * numB), numA) ?: return null
         return (a to b)

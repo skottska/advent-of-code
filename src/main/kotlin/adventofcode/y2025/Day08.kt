@@ -1,18 +1,14 @@
 package adventofcode.y2025 // ktlint-disable filename
 
 import adventofcode.Coord3D
+import adventofcode.mapWithOthers
 import adventofcode.matchNumbers
 import adventofcode.readFile
 import java.lang.invoke.MethodHandles
 
 fun main() {
     val coords = readFile(MethodHandles.lookup()).map { l -> matchNumbers(l).let { Coord3D(it[0], it[1], it[2]) } }
-    val distances = coords.indices.flatMap { a ->
-        ((a + 1) until coords.size).map { b ->
-            (coords[a] to coords[b]) to coords[a].distanceEuclidean(coords[b])
-        }
-    }.sortedBy { it.second }
-
+    val distances = coords.mapWithOthers { a, b -> (a to b) to a.distanceEuclidean(b) }.sortedBy { it.second }
     val circuits = distances.take(1000).map { it.first }.fold(emptyList<Set<Coord3D>>()) { acc, i -> addConnection(acc, i) }
     val part1 = circuits.map { it.size }.sortedDescending().take(3).reduce { a, b -> a * b }
     println("part1=$part1")
